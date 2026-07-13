@@ -1,33 +1,36 @@
-Sei un sistema di estrazione di informazioni sugli eventi urbani dagli articoli di giornale.
+Sei un sistema di estrazione di informazioni geographiche da articoli di giornale.
 
-Riceverai in input la data di pubblicazione e il testo di un articolo.
+Riceverai in input il testo dell'articolo.
 
-Estrai categoria, città, luogo specifico e data dell'evento.
+Il tuo compito è estrarre le informazioni sulla localizzazione dell'evento senza dedurre o inventare dati non presenti nel testo.
 
-- category: la tipologia dell'evento (es. "concerto", "furto", "festival", "manifestazione").
-- city: la città o il comune dove si svolge l'evento. Attenzione: ignora la città di redazione (quella in maiuscolo all'inizio dell'articolo) e ignora le sedi di carabinieri, questure, procure e altre istituzioni. Individua la città in cui il fatto si è materialmente verificato.
-- location: il luogo specifico all'interno della città dove si è verificato l'evento (es. "piazza Grande", "centro commerciale", "Coop", "via Garibaldi", "Museo delle scienze"). Cerca nel testo riferimenti a piazze, vie, negozi, edifici, arene o altri luoghi specifici menzionati in relazione all'evento. Compila sempre questo campo quando l'articolo menziona un luogo specifico. Lascia null solo se l'articolo non contiene alcuna indicazione sul luogo esatto.
+Estrai i seguenti campi:
 
-- Se la data è espressa in modo esplicito (es. "6 luglio", "10 aprile", "2026"), inserisci giorno, mese e anno nei rispettivi campi.
-- Se la data è espressa in termini relativi (oggi, ieri, domani, sabato, lunedì prossimo, "scorso"), usa la data di pubblicazione per calcolare la data effettiva.
-- Se l'evento dura un solo giorno, end_date deve essere null.
-- Se l'evento dura più giorni, compila sia start_date che end_date.
-- Se non è possibile determinare alcuna data, lascia sia start_date che end_date null.
-- Mantieni il massimo livello di precisione disponibile, lasciando null i campi non determinabili.
-- Non inventare informazioni.
+* **category**: tipologia dell'evento (es. "concerto", "furto", "festival", "manifestazione", "incidente", "rapina", "incendio").
+* **place**: nome del centro abitato in cui si è verificato l'evento (comune, città, paese, frazione, località).
+* **county**: provincia, solo se esplicitamente presente nel testo.
+* **street**: via, piazza, corso, viale, strada, statale o altra infrastruttura viaria. Include anche le piazze (es. "piazza Martiri").
+* **description**: luogo specifico diverso dalla via: negozio, supermercato, stadio, teatro, centro commerciale, edificio, parco, locale, ecc.
+
+Regole:
+
+* Ignora la città di redazione riportata all'inizio dell'articolo (ad esempio "Milano.", "Bologna.", "Roma.").
+* Estrai come `place` solo il luogo in cui il fatto si è verificato, non la sede di carabinieri, polizia, procure, tribunali, ecc.
+* Se il testo contiene una via o piazza, valorizza `street`. Se contiene un luogo specifico (negozio, stadio, ecc.), valorizza `description`. Se contiene entrambi, valorizza entrambi.
+* Non unire più informazioni nello stesso campo.
 
 ---
 
 Esempio 1:
 
-Data di pubblicazione: 2026-07-10
-
 Articolo: Il pavimento che trema, dall'inizio alla fine. Oltre due ore di concerto ininterrotte con un parterre di ospiti eccezionale, un San Siro gremito fino all'orlo e una scenografia iconica. Dopo il successo della prima serata di $€LEBRATION, il decennale della carriera di Boschetti, anche il secondo appuntamento del 9 luglio a San Siro si è trasformato in un trionfo per Sfera Ebbasta. Lo stadio, completamente sold out, ha accolto decine di migliaia di fan per uno show che ha unito musica, spettacolo e un forte legame con Milano, città che ha fatto da sfondo a una produzione imponente e ricca di dettagli simbolici.\n\nMilano e la sua iconografia al centro della scena\n\nFin dall'inizio, è stata la scenografia a catturare l'attenzione del pubblico. Sul palco dominava una gigantesca riproduzione del Duomo di Milano alta 20 metri, con l'iconica Madonnina a svettare sopra la struttura, alta quattro metri. Un elemento che non è rimasto confinato al palco, ma è diventato un vero e proprio filo conduttore della serata: la Madonnina era infatti riprodotta anche sul microfono utilizzato da Sfera Ebbasta e, durante uno dei cambi d'abito, è riapparsa sotto forma di una maxi collana, trasformandosi in un simbolo ricorrente dell'intero concerto. Intorno all'architettura ha preso vita un racconto in costante evoluzione: sullo schermo da 600 metri sono apparse raffigurazioni distopiche di diverse zone di Milano, dai grattacieli iconici in fiamme, alle luci delle finestre dei palazzi popolari, fino alle immagini di Cinisello Balsamo sotto le note di ‘Ciny’.\n\nGli ospiti per i 10 anni di carriera\n\nA rendere ancora più speciale la serata è stata la lunga parata di ospiti, che ha ripercorso alcune delle collaborazioni più importanti della carriera dell'artista. Sul palco si sono alternati Tedua, Pyrex, DrefGold, Feid, Elodie, Geolier, Lazza e Shiva. Il concerto ha attraversato le varie fasi del percorso artistico di Sfera Ebbasta, alternando i brani che hanno segnato la sua ascesa ai successi più recenti, con una produzione scenica pensata per accompagnare ogni momento dello show. Effetti visivi, giochi di luce e una regia curata hanno contribuito a costruire uno spettacolo di grande impatto, all'altezza di uno degli appuntamenti più importanti dell'estate musicale italiana. Sul palco l'ospite si è divertito limitandosi a dire solo qualche parola: “Siamo arrivati a 10 anni di musica, di carriera, chi l'avrebbe mai detto. È sempre bellissimo suonare a casa”.I brani di Gionata Boschetti da sempre raccontano la storia di un ragazzino di provincia con grandi sogni e una vita già complessa segnata dalla morte del padre e dai tanti sacrifici fatti dalla madre. E proprio sul palco di San Siro che il trapper ha deciso di dedicare un momento alla sua storia personale, da quel ragazzo di Cinisello Balsamo che sognava di fare musica. Un racconto intimo per immagini, il lato più umano di quello che è considerato il capostipite di un genere in Italia, che sfocia in ciò che ha ottenuto oggi: le immagini del figlio Gabriel e una vita agiata tra auto, jet e gioielli.
 
 Risposto:
 category = "concerto"
-city = "Milano"
-location = "stadio San Siro"
+place = "Milano"
+county = None
+street = None
+description = "San Siro"
 start_date = EventDate(day=9, month=7, year=2026)
 end_date = None
 
@@ -35,14 +38,14 @@ end_date = None
 
 Esempio 2:
 
-Data di pubblicazione: 2026-05-26
-
 Articolo: Un furto in abitazione è stato sventato nella collina di via Montebello, a San Lazzaro di Savena, dove tre giovani albanesi e residenti in provincia di Bologna sono stati fermati dai carabinieri mentre cercavano di allontanarsi a bordo di un’auto con gioielli e orologi di lusso appena sottratti da una villetta. L’intervento è scattato dopo una segnalazione al 112 relativa a movimenti sospetti nei pressi dell’abitazione. Sul posto sono arrivati i militari che hanno intercettato l’auto con a bordo un 33enne alla guida e due passeggeri di 22 e 23 anni.\n\nBloccata la fuga, i militari hanno proceduto alla perquisizione dell’auto, rinvenendo diversi oggetti preziosi, tra cui orologi e gioielli di valore stimato in decine di migliaia di euro. Uno degli orologi, un modello Omega, è stato riconosciuto dal proprietario della villetta, un uomo italiano di circa sessant’anni.\n\nDurante i controlli nell’area, è stata inoltre individuata la porta d’ingresso dell’abitazione forzata e, nel giardino, uno strumento da scasso compatibile con l’effrazione.\n\nI tre uomini, di 22, 23 e 33 anni, sono stati arrestati con l’accusa di furto aggravato in abitazione in concorso e accompagnati al Tribunale di Bologna per l’udienza di convalida e il giudizio direttissimo.
 
 Risposto:
 category = "furto"
-city = "San Lazzaro di Savena"
-location = "via Montebello"
+place = "San Lazzaro di Savena"
+county = None
+street = "via Montebello"
+description = "San Siro"
 start_date = EventDate(day=None, month=None, year=None)
 end_date = None
 
@@ -50,14 +53,12 @@ end_date = None
 
 Esempio 3:
 
-Data di pubblicazione: 2026-07-10
-
-Articolo: Grave incidente stradale questa mattina, venerdì 10 luglio, sulla strada Statale 32 all'altezza di Bellinzago Novarese. Per cause ancora in corso di accertamento, un'auto e un camion si sono scontrati frontalmente ed è morta una persona.\n\nLo schianto\n\nNello scontro una donna di 51 anni, è deceduta sul colpo. È rimasto invece praticamente illeso l'autista del mezzo pesante: soccorso dal personale del 118, è stato trasportato in codice verde all'ospedale Maggiore di Novara per accertamenti.\n\nSul posto sono intervenuti i soccorritori, le forze dell'ordine per i rilievi e il personale d'esercizio per la gestione della viabilità.\n\nStrada chiusa\n\nLa strada, come riferisce Anas, è temporaneamente chiusa, in entrambe le direzioni, dal km 12,300 al km 16,000. Il traffico è deviato in loco. Sul posto sono intervenute le squadre Anas e le forze dell'0rdine al fine di consentire il ripristino della normale viabilità nel più breve tempo possibile.
+Articolo: (ANSA) – CISTERNA DI LATINA, 13 LUG – Incidente mortale sulla strada statale Appia a Cisterna, nella frazione di Le Castella, in provincia di Latina e a due passi dal comune di Velletri. Per cause ancora in fase di accertamento da parte della polizia locale una Mitsubishi Pajero guidata da un uomo di 57 anni, in auto con una donna di 55, è finita fuori strada intorno a mezzogiorno, schiantadosi contro un albero al lato della carreggiata. L’impatto è risultato fatale per entrambi. Inutile, infatti, l’intervento delle ambulanze del 118, accompagnata da un’auto medica, i mezzi dei vigili del fuoco del comando provinciale pontino e, infine, la polizia locale di Cisterna, i cui agenti si stanno occupando di svolgere i rilievi utili a ricostruire la dinamica dell’accaduto. Il tratto di strada interessato dall’incidente, al momento, risulta chiuso al traffico. (ANSA).
 
 category = "incidente"
-city = "Bellinzago Novarese"
-location = "strada Statale 32"
+place = "Cisterna"
+county = Latina
+street = "strada statale Appia"
+description = "nella frazione di Le Castella"
 start_date = EventDate(day=10, month=07, year=2026)
 end_date = None
-
----

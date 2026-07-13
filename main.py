@@ -25,6 +25,7 @@ def main():
                 "article": item["news text"],
                 "publication_date": item["publication date"],
                 "is_event": None,
+                "geo": None,
                 "event": None,
             }
         )
@@ -38,14 +39,17 @@ def main():
         event = result.get("event")
         if event:
             print(f"\n=== GEOLOCATION ===")
-            print(f"  Extracted city: {event.city}")
-            print(f"  Geocoded city:  {event.geocoded_city or 'N/A'}")
+            print(f"  Place:     {event.place}")
+            print(f"  County:    {event.county or 'N/A'}")
+            print(f"  Street:    {event.street or 'N/A'}")
+            print(f"  Description: {event.description or 'N/A'}")
+            print(f"  Geocoded:  {event.geocoded_city or 'N/A'}")
             if event.latitude and event.longitude:
                 print(f"  Status: VALIDATED")
                 print(f"  Lat: {event.latitude}, Lng: {event.longitude}")
                 print(f"  Google Maps: https://www.google.com/maps?q={event.latitude},{event.longitude}")
             else:
-                print(f"  Status: REJECTED (city mismatch)")
+                print(f"  Status: REJECTED (no match found)")
 
 
 if __name__ == "__main__":
