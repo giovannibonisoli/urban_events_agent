@@ -41,3 +41,6 @@ Thumbs.db
 
 # LangChain/LangGraph
 langchain_debug/
+
+# slurm
+run_batch.sh

@@ -3,20 +3,20 @@ from app.state import EventState
 
 from pathlib import Path
 
-from app.llm import detection_llm
+from app.llm import detection_llm, structured_llm
 from app.models.detection import DetectionResult
 
 
 PROMPT = Path("app/prompts/detector.txt").read_text(encoding="utf-8")
 
-structured_llm = detection_llm.with_structured_output(DetectionResult)
+structured_detector = structured_llm(detection_llm, DetectionResult)
 
 
 def event_detector(state: EventState):
 
     print("\n========== EVENT DETECTOR ==========")
 
-    response = structured_llm.invoke(
+    response = structured_detector.invoke(
         f"""{PROMPT}
 
 Articolo:

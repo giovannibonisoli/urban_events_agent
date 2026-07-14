@@ -45,8 +45,6 @@ def _cities_match(extracted: str, geocoded: str) -> bool:
 
 def _build_query(event) -> str:
     parts = []
-    if event.description:
-        parts.append(event.description)
     if event.street:
         parts.append(event.street)
     if event.place:
@@ -76,6 +74,47 @@ def _geocode_as_province(query: str) -> tuple[float, float, str] | None:
     match = next((item for item in results if item.raw.get("addresstype") == "city"), None)
     if match:
         return match.latitude, match.longitude, match.address
+    return None
+
+
+def _geocode_place(query: str, place: str) -> tuple[float, float, str] | None:
+    print("Query:", query)
+    results = geolocator.geocode(
+        query,
+        exactly_one=False,
+        language="it",
+        addressdetails=True,
+        limit=5,
+    )
+
+    for item in results or []:
+        address = item.raw.get("address", {})
+        location = address.get("village") or address.get("town") or address.get("city") or ""
+        if _cities_match(place, location):
+            return item.latitude, item.longitude, item.address
+
+    for item in results or []:
+        addresstype = item.raw.get("addresstype", "")
+        address = item.raw.get("address", {})
+        if addresstype in ("city", "town") or "city" in address or "town" in address:
+            return item.latitude, item.longitude, item.address
+
+    query_with_province = f"{query}, Modena"
+    results2 = geolocator.geocode(
+        query_with_province,
+        exactly_one=False,
+        language="it",
+        addressdetails=True,
+        limit=5,
+    )
+
+    for item in results2 or []:
+        name = item.raw.get("name", "")
+        address = item.raw.get("address", {})
+        province = address.get("state", "")
+        if (place.lower() in name.lower() or name.lower() in place.lower()) and "modena" in province.lower():
+            return item.latitude, item.longitude, item.address
+
     return None
 
 
@@ -113,6 +152,15 @@ def event_geolocator(state: dict) -> dict:
     if event.county is None and _is_province(event.place):
         print(f"  Place '{event.place}' is a province. Geocoding for municipality.")
         match = _geocode_as_province(event.place)
+        if match:
+            event.latitude, event.longitude, event.geocoded_city = match
+        return {"event": event}
+
+    if event.county is None:
+        print(f"  No county. Geocoding place '{event.place}'.")
+        query = _build_query(event)
+        match = _geocode_place(query, event.place)
+
         if match:
             event.latitude, event.longitude, event.geocoded_city = match
         return {"event": event}
