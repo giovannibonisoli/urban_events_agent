@@ -1,7 +1,7 @@
 llm:
   provider: huggingface
-  detection_model: meta-llama/Meta-Llama-3-8B
-  extraction_model: meta-llama/Meta-Llama-3-8B
+  detection_model: meta-llama/Meta-Llama-3-8B-Instruct
+  extraction_model: meta-llama/Meta-Llama-3-8B-Instruct
   # provider: ollama
   # detection_model: llama3.2:3b
   # extraction_model: qwen2.5:7b

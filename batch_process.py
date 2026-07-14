@@ -63,7 +63,21 @@ def process_articles(input_file: str, output_file: str):
             entry["event"] = None
 
         results.append(entry)
-        print(f"  -> is_event={entry['is_event']}, place={entry['event']['place'] if entry['event'] else 'N/A'}")
+        if event:
+            print(f"\n=== GEOLOCATION ===")
+            print(f"  Place:     {event.place}")
+            print(f"  County:    {event.county or 'N/A'}")
+            print(f"  Street:    {event.street or 'N/A'}")
+            print(f"  Description: {event.description or 'N/A'}")
+            print(f"  Geocoded:  {event.geocoded_city or 'N/A'}")
+            if event.latitude and event.longitude:
+                print(f"  Status: VALIDATED")
+                print(f"  Lat: {event.latitude}, Lng: {event.longitude}")
+                print(f"  Google Maps: https://www.google.com/maps?q={event.latitude},{event.longitude}")
+            else:
+                print(f"  Status: REJECTED (no match found)")
+        else:
+            print(f"  -> is_event={entry['is_event']}, place=N/A")
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)

@@ -30,9 +30,21 @@ def _make_llm(model: str):
         llm = HuggingFacePipeline.from_model_id(
             model_id=model,
             task="text-generation",
-            model_kwargs={"device_map": "auto"},
-            pipeline_kwargs={"temperature": 0, "max_new_tokens": 1024},
+            model_kwargs={"device_map": "auto", "use_cache": False},
+            pipeline_kwargs={"do_sample": False, "max_new_tokens": 1024, "return_full_text": False},
         )
+        tokenizer = llm.pipeline.tokenizer
+        if not getattr(tokenizer, "chat_template", None):
+            tokenizer.chat_template = (
+                "{% for message in messages %}"
+                "{% if message['role'] == 'user' %}"
+                "{{ '<|start_header_id|>user<|end_header_id|>\n\n' + message['content'] + '<|eot_id|>' }}"
+                "{% elif message['role'] == 'assistant' %}"
+                "{{ '<|start_header_id|>assistant<|end_header_id|>\n\n' + message['content'] + '<|eot_id|>' }}"
+                "{% endif %}"
+                "{% endfor %}"
+                "{{ '<|start_header_id|>assistant<|end_header_id|>\n\n' }}"
+            )
         return ChatHuggingFace(llm=llm)
 
     else:
@@ -43,10 +55,15 @@ def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
     result = {}
     for line in text.strip().splitlines():
         line = line.strip()
-        if "=" not in line:
+        if not line or line.startswith("Ecco") or line.startswith("---"):
             continue
-        key, _, value = line.partition("=")
-        key = key.strip()
+        line = re.sub(r"^\*\s+", "", line)
+        line = line.replace("**", "")
+        sep = "=" if "=" in line else ":" if ":" in line else None
+        if sep is None:
+            continue
+        key, _, value = line.partition(sep)
+        key = key.strip().strip("*").strip()
         value = value.strip()
 
         if key not in schema.model_fields:
@@ -56,7 +73,9 @@ def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
         field_type = field_info.annotation
 
         if value in ("None", "null", ""):
-            result[key] = None
+            args = getattr(field_type, "__args__", None)
+            if args and type(None) in args:
+                result[key] = None
             continue
 
         value = value.strip('"').strip("'")
@@ -102,10 +121,17 @@ def structured_llm(llm, schema: Type[BaseModel]):
     if provider == "ollama":
         return llm.with_structured_output(schema)
 
+    from langchain_core.messages import HumanMessage
+
     class _StructuredWrapper:
         def invoke(self, prompt):
+            if isinstance(prompt, str):
+                prompt = [HumanMessage(content=prompt)]
             response = llm.invoke(prompt)
             text = response.content if hasattr(response, "content") else str(response)
+            print("--- RAW MODEL OUTPUT ---")
+            print(text[:500])
+            print("--- END RAW ---")
             return _parse_output(text, schema)
 
     return _StructuredWrapper()

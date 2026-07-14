@@ -1,11 +1,55 @@
+import json
 from pathlib import Path
+
+from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
 from app.llm import extraction_llm, structured_llm
 from app.models.event import _DateExtraction, EventDate
 from app.state import EventState
 
 
-PROMPT = Path("app/prompts/date_extractor.txt").read_text(encoding="utf-8")
+SYSTEM_PROMPT = Path("app/prompts/date_extractor.txt").read_text(encoding="utf-8")
+
+with open("app/prompts/examples/date_extractor_examples.json", encoding="utf-8") as f:
+    raw_examples = json.load(f)
+
+
+def _format_date(d):
+    if d is None:
+        return "None"
+    parts = []
+    if d.get("day") is not None:
+        parts.append(f"day={d['day']}")
+    if d.get("month") is not None:
+        parts.append(f"month={d['month']}")
+    if d.get("year") is not None:
+        parts.append(f"year={d['year']}")
+    return f"EventDate({', '.join(parts)})" if parts else "EventDate(day=None, month=None, year=None)"
+
+
+def _format_example(ex):
+    input_text = f"Data di pubblicazione: {ex['publication_date']}\n\nArticolo:\n\n{ex['article']}"
+    start = _format_date(ex.get("start_date"))
+    end = _format_date(ex.get("end_date"))
+    output_text = f"start_date = {start}\nend_date = {end}"
+    return {"input": input_text, "output": output_text}
+
+
+example_prompt = ChatPromptTemplate.from_messages([
+    ("human", "{input}"),
+    ("ai", "{output}"),
+])
+
+few_shot_prompt = FewShotChatMessagePromptTemplate(
+    example_prompt=example_prompt,
+    examples=[_format_example(ex) for ex in raw_examples],
+)
+
+full_prompt = ChatPromptTemplate.from_messages([
+    ("system", SYSTEM_PROMPT),
+    few_shot_prompt,
+    ("human", "Data di pubblicazione: {publication_date}\n\nArticolo:\n\n{article}"),
+])
 
 structured_date = structured_llm(extraction_llm, _DateExtraction)
 
@@ -42,16 +86,11 @@ def date_extractor(state: EventState) -> dict:
         print("No event found. Skipping extraction.")
         return {"event": None}
 
-    raw = structured_date.invoke(
-        f"""{PROMPT}
-
-Data di pubblicazione: {state["publication_date"]}
-
-Articolo:
-
-{state["article"]}
-"""
+    messages = full_prompt.format_messages(
+        publication_date=state["publication_date"],
+        article=state["article"],
     )
+    raw = structured_date.invoke(messages)
 
     print("Extracted Dates:")
     print(raw)
