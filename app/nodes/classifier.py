@@ -3,24 +3,22 @@ from pathlib import Path
 
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
-from app.llm import extraction_llm, structured_llm
-from app.models.event import _GeoExtraction
+from app.llm import detection_llm, structured_llm
+from app.models.classifier import ClassificationResult
 from app.state import EventState
 
 
-SYSTEM_PROMPT = Path("app/prompts/geo_extractor.txt").read_text(encoding="utf-8")
+SYSTEM_PROMPT = Path("app/prompts/classifier.txt").read_text(encoding="utf-8")
 
-with open("app/prompts/examples/geo_extractor_examples.json", encoding="utf-8") as f:
+with open("app/prompts/examples/classifier_examples.json", encoding="utf-8") as f:
     raw_examples = json.load(f)
 
 
 def _format_example(ex):
     input_text = f"Articolo:\n\n{ex['article']}"
     lines = [
-        f"place = {ex['place']}",
-        f"county = {ex.get('county') or 'None'}",
-        f"street = {ex.get('street') or 'None'}",
-        f"description = {ex.get('description') or 'None'}",
+        f"event_category = {ex['event_category']}",
+        f"is_event = {'true' if ex['is_event'] else 'false'}",
     ]
     output_text = "\n".join(lines)
     return {"input": input_text, "output": output_text}
@@ -42,20 +40,19 @@ full_prompt = ChatPromptTemplate.from_messages([
     ("human", "Articolo:\n\n{article}"),
 ])
 
-structured_geo = structured_llm(extraction_llm, _GeoExtraction)
+structured_classifier = structured_llm(detection_llm, ClassificationResult)
 
 
-def geo_extractor(state: EventState) -> dict:
-    print("\n========== GEO EXTRACTOR ==========")
+def event_classifier(state: EventState):
 
-    if not state["is_event"]:
-        print("No event found. Skipping extraction.")
-        return {"geo": None}
+    print("\n========== EVENT CLASSIFIER ==========")
 
     messages = full_prompt.format_messages(article=state["article"])
-    raw = structured_geo.invoke(messages)
+    response = structured_classifier.invoke(messages)
 
-    print("Extracted Geo:")
-    print(raw)
+    print(response)
 
-    return {"geo": raw}
+    return {
+        "event_category": response.event_category,
+        "is_event": response.is_event,
+    }

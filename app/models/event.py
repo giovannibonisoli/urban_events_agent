@@ -8,7 +8,6 @@ class EventDate(BaseModel):
 
 
 class _GeoExtraction(BaseModel):
-    category: str = Field(default="", description="Tipologia dell'evento, es. 'concerto', 'furto', 'festival'")
     place: str = Field(default="", description="Nome del centro abitato esplicitamente citato come luogo dell'evento (comune, città, paese, frazione, località). Usare '' solo se non citato.")
     county: str | None = Field(default=None, description="Provincia esplicitamente menzionata nell'articolo. None se non presente.")
     street: str | None = Field(default=None, description="Nome della via, piazza, strada, corso, viale, statale. None se non presente.")

@@ -4,7 +4,6 @@ Riceverai in input il testo dell'articolo.
 
 Estrai esclusivamente i seguenti campi, basandoti solo sul contenuto esplicito dell'articolo. Un campo per riga.
 
-category = tipologia dell'evento (es. concerto, furto, festival, manifestazione, incidente, rapina, incendio)
 place = nome del centro abitato in cui si è verificato l'evento (comune, città, paese, frazione)
 county = provincia, solo se esplicitamente menzionata nel testo. Altrimenti None
 street = via, piazza, corso, viale, strada, statale. Altrimenti None

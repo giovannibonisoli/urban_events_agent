@@ -51,6 +51,15 @@ def _make_llm(model: str):
         raise ValueError(f"Unknown provider: {provider}")
 
 
+def _unwrap_type(field_type):
+    args = getattr(field_type, "__args__", None)
+    if args:
+        for arg in args:
+            if arg is not type(None):
+                return arg
+    return field_type
+
+
 def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
     result = {}
     for line in text.strip().splitlines():
@@ -85,7 +94,9 @@ def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
             result[key] = None
             continue
 
-        if hasattr(field_type, "model_fields"):
+        inner_type = _unwrap_type(field_type)
+
+        if hasattr(inner_type, "model_fields"):
             inner = {}
             day_match = re.search(r"day=(\d+)", value)
             month_match = re.search(r"month=(\d+)", value)
@@ -96,15 +107,15 @@ def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
                 inner["month"] = int(month_match.group(1))
             if year_match:
                 inner["year"] = int(year_match.group(1))
-            result[key] = field_type(**inner)
-        elif field_type is bool:
+            result[key] = inner_type(**inner)
+        elif inner_type is bool:
             result[key] = value.lower() in ("true", "1", "yes")
-        elif field_type is int:
+        elif inner_type is int:
             try:
                 result[key] = int(value)
             except ValueError:
                 result[key] = None
-        elif field_type is float:
+        elif inner_type is float:
             try:
                 result[key] = float(value)
             except ValueError:

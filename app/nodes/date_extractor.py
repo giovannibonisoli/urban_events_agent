@@ -106,7 +106,7 @@ def date_extractor(state: EventState) -> dict:
     from app.models.event import Event
 
     event = Event(
-        category=geo.category,
+        category=state.get("event_category") or "",
         place=geo.place,
         county=geo.county,
         street=geo.street,

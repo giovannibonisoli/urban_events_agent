@@ -3,11 +3,14 @@ import argparse
 from pathlib import Path
 
 from app.graph import graph
+from app.classifier_graph import classifier_graph
 
 
-def process_articles(input_file: str, output_file: str):
+def process_articles(input_file: str, output_file: str, use_classifier: bool):
     input_path = Path(input_file)
     output_path = Path(output_file)
+
+    g = classifier_graph if use_classifier else graph
 
     if not input_path.exists():
         print(f"Input file {input_path} not found.")
@@ -21,11 +24,12 @@ def process_articles(input_file: str, output_file: str):
     for i, item in enumerate(items, 1):
         print(f"\n[{i}/{len(items)}] Processing: {item['news text'][:80]}...")
 
-        state = graph.invoke(
+        state = g.invoke(
             {
                 "article": item["news text"],
                 "publication_date": item["publication date"],
                 "is_event": None,
+                "event_category": None,
                 "geo": None,
                 "event": None,
             }
@@ -36,6 +40,7 @@ def process_articles(input_file: str, output_file: str):
             "article": item["news text"],
             "publication_date": item["publication date"],
             "is_event": state.get("is_event"),
+            "event_category": state.get("event_category"),
         }
 
         if event:
@@ -89,6 +94,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Batch process urban events")
     parser.add_argument("-i", "--input", default="data/data.json", help="Input JSON file")
     parser.add_argument("-o", "--output", default="data/results.json", help="Output JSON file")
+    parser.add_argument(
+        "--graph",
+        choices=["detector", "classifier"],
+        default="detector",
+        help="Graph to use: 'detector' (binary detection) or 'classifier' (categorized classification)",
+    )
     args = parser.parse_args()
 
-    process_articles(args.input, args.output)
+    process_articles(args.input, args.output, use_classifier=(args.graph == "classifier"))
