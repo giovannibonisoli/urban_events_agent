@@ -12,14 +12,13 @@ Categorie di eventi di interesse:
 - Sport locale
 - Cultura e spettacolo
 
-Categoria per articoli che NON sono eventi:
+Categoria per articoli che NON sono eventi di interesse:
 - Altro: opinioni, editoriali, classifiche, statistiche, sondaggi, indiscrezioni, voci di mercato, analisi politiche, commenti personali, rassegne stampa, notizie senza evento specifico
 
 Regole importanti:
 1. Se l'articolo descrive un avvenimento concreto e specifico, classificalo nella categoria più appropriata tra quelle elencate.
-2. Se l'articolo parla di tendenze, classifiche, opinioni, indiscrezioni, valutazioni, o non descrive un evento specifico già avvenuto o programmato, usa la categoria "altro" e imposta is_event=false.
-3. Se l'articolo descrive un evento reale ma non rientra nelle categorie specifiche elencate, usa "Altro" con is_event=true.
+2. Se l'articolo parla di tendenze, classifiche, opinioni, indiscrezioni, valutazioni, o non descrive un evento specifico già avvenuto o programmato, usa la categoria "Altro".
+3. Se l'articolo descrive un evento reale ma non rientra nelle categorie specifiche elencate, usa "Altro".
 
 Rispondi con:
 - event_category: la categoria predefinita più appropriata
-- is_event: true solo se l'articolo descrive un avvenimento concreto e specifico, false altrimenti

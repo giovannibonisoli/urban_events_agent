@@ -1,26 +1,13 @@
 import json
-import argparse
 from pathlib import Path
 
 from app.graph import graph
-from app.classifier_graph import classifier_graph
 
 
 DATA_FILE = Path("data/data.json")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Process urban events")
-    parser.add_argument(
-        "--graph",
-        choices=["detector", "classifier"],
-        default="detector",
-        help="Graph to use: 'detector' (binary detection) or 'classifier' (categorized classification)",
-    )
-    args = parser.parse_args()
-
-    g = classifier_graph if args.graph == "classifier" else graph
-
     if not DATA_FILE.exists():
         print(f"File {DATA_FILE} not found.")
         return
@@ -33,7 +20,7 @@ def main():
         print(f"ITEM: {i}")
         print("=" * 80)
 
-        result = g.invoke(
+        result = graph.invoke(
             {
                 "article": item["news text"],
                 "publication_date": item["publication date"],
@@ -48,8 +35,7 @@ def main():
         print("\n=== FINAL STATE ===")
         print(result)
 
-        if args.graph == "classifier":
-            print(f"\n  Category: {result.get('event_category', 'N/A')}")
+        print(f"\n  Category: {result.get('event_category', 'N/A')}")
 
         print("\n=== EVENT ===")
         print(result["event"])

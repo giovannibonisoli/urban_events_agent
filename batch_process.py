@@ -3,14 +3,11 @@ import argparse
 from pathlib import Path
 
 from app.graph import graph
-from app.classifier_graph import classifier_graph
 
 
-def process_articles(input_file: str, output_file: str, use_classifier: bool):
+def process_articles(input_file: str, output_file: str):
     input_path = Path(input_file)
     output_path = Path(output_file)
-
-    g = classifier_graph if use_classifier else graph
 
     if not input_path.exists():
         print(f"Input file {input_path} not found.")
@@ -24,7 +21,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
     for i, item in enumerate(items, 1):
         print(f"\n[{i}/{len(items)}] Processing: {item['news text'][:80]}...")
 
-        state = g.invoke(
+        state = graph.invoke(
             {
                 "article": item["news text"],
                 "publication_date": item["publication date"],
@@ -85,7 +82,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
             else:
                 print(f"  Status: REJECTED (no match found)")
         else:
-            print(f"  -> is_event={entry['is_event']}, place=N/A")
+            print(f"  -> is_event={entry['is_event']}, category={entry.get('event_category', 'N/A')}")
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
@@ -97,12 +94,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Batch process urban events")
     parser.add_argument("-i", "--input", default="data/data.json", help="Input JSON file")
     parser.add_argument("-o", "--output", default="data/results.json", help="Output JSON file")
-    parser.add_argument(
-        "--graph",
-        choices=["detector", "classifier"],
-        default="detector",
-        help="Graph to use: 'detector' (binary detection) or 'classifier' (categorized classification)",
-    )
     args = parser.parse_args()
 
-    process_articles(args.input, args.output, use_classifier=(args.graph == "classifier"))
+    process_articles(args.input, args.output)

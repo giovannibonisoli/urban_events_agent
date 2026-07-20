@@ -16,11 +16,7 @@ with open("app/prompts/examples/classifier_examples.json", encoding="utf-8") as 
 
 def _format_example(ex):
     input_text = f"Articolo:\n\n{ex['article']}"
-    lines = [
-        f"event_category = {ex['event_category']}",
-        f"is_event = {'true' if ex['is_event'] else 'false'}",
-    ]
-    output_text = "\n".join(lines)
+    output_text = f"event_category = {ex['event_category']}"
     return {"input": input_text, "output": output_text}
 
 
@@ -54,5 +50,4 @@ def event_classifier(state: EventState):
 
     return {
         "event_category": response.event_category,
-        "is_event": response.is_event,
     }
