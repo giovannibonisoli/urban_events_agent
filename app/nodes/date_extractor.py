@@ -113,6 +113,7 @@ def date_extractor(state: EventState) -> dict:
         loc_description=geo.loc_description,
         start_date=start_date or EventDate(),
         end_date=end_date,
+        extracted_info=state.get("extracted_info"),
     )
 
     print("Merged Event:")

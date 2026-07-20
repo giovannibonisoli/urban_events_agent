@@ -65,6 +65,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
                 "latitude": event.latitude,
                 "longitude": event.longitude,
                 "geocoded_city": event.geocoded_city,
+                "extracted_info": event.extracted_info,
             }
         else:
             entry["event"] = None

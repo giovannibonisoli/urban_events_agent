@@ -32,3 +32,4 @@ class Event(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     geocoded_city: str | None = None
+    extracted_info: dict[str, str] | None = None
