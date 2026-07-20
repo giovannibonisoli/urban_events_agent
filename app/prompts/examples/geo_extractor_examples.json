@@ -4,20 +4,20 @@
     "place": "Milano",
     "county": null,
     "street": null,
-    "description": "San Siro"
+    "loc_description": "San Siro"
   },
   {
     "article": "Un furto in abitazione è stato sventato nella collina di via Montebello, a San Lazzaro di Savena, dove tre giovani albanesi e residenti in provincia di Bologna sono stati fermati dai carabinieri mentre cercavano di allontanarsi a bordo di un'auto con gioielli e orologi di lusso appena sottratti da una villetta. L'intervento è scattato dopo una segnalazione al 112 relativa a movimenti sospetti nei pressi dell'abitazione. Sul posto sono arrivati i militari che hanno intercettato l'auto con a bordo un 33enne alla guida e due passeggeri di 22 e 23 anni.\n\nBloccata la fuga, i militari hanno proceduto alla perquisizione dell'auto, rinvenendo diversi oggetti preziosi, tra cui orologi e gioielli di valore stimato in decine di migliaia di euro. Uno degli orologi, un modello Omega, è stato riconosciuto dal proprietario della villetta, un uomo italiano di circa sessant'anni.\n\nDurante i controlli nell'area, è stata inoltre individuata la porta d'ingresso dell'abitazione forzata e, nel giardino, uno strumento da scasso compatibile con l'effrazione.\n\nI tre uomini, di 22, 23 e 33 anni, sono stati arrestati con l'accusa di furto aggravato in abitazione in concorso e accompagnati al Tribunale di Bologna per l'udienza di convalida e il giudizio direttissimo.",
     "place": "San Lazzaro di Savena",
     "county": null,
     "street": "via Montebello",
-    "description": "villetta"
+    "loc_description": "villetta"
   },
   {
     "article": "(ANSA) – CISTERNA DI LATINA, 13 LUG – Incidente mortale sulla strada statale Appia a Cisterna, nella frazione di Le Castella, in provincia di Latina e a due passi dal comune di Velletri. Per cause ancora in fase di accertamento da parte della polizia locale una Mitsubishi Pajero guidata da un uomo di 57 anni, in auto con una donna di 55, è finita fuori strada intorno a mezzogiorno, schiantadosi contro un albero al lato della carreggiata. L'impatto è risultato fatale per entrambi. Inutile, infatti, l'intervento delle ambulanze del 118, accompagnata da un'auto medica, i mezzi dei vigili del fuoco del comando provinciale pontino e, infine, la polizia locale di Cisterna, i cui agenti si stanno occupando di svolgere i rilievi utili a ricostruire la dinamica dell'accaduto. Il tratto di strada interessato dall'incidente, al momento, risulta chiuso al traffico. (ANSA).",
     "place": "Cisterna",
     "county": "Latina",
     "street": "strada statale Appia",
-    "description": "nella frazione di Le Castella"
+    "loc_description": "nella frazione di Le Castella"
   }
 ]

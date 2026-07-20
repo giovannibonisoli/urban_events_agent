@@ -7,11 +7,11 @@ Estrai esclusivamente i seguenti campi, basandoti solo sul contenuto esplicito d
 place = nome del centro abitato in cui si è verificato l'evento (comune, città, paese, frazione)
 county = provincia, solo se esplicitamente menzionata nel testo. Altrimenti None
 street = via, piazza, corso, viale, strada, statale. Altrimenti None
-description = luogo specifico diverso dalla via: negozio, supermercato, stadio, teatro, parco, locale, ecc. Altrimenti None
+loc_description = luogo specifico diverso dalla via: negozio, supermercato, stadio, teatro, parco, locale, ecc. Altrimenti None
 
 Regole:
 - Ignora la città di redazione riportata all'inizio dell'articolo (es. "Milano.", "Bologna.").
 - Come place usa solo il luogo in cui il fatto si è verificato, non la sede di carabinieri, polizia, procure, tribunali.
-- Se il testo contiene una via o piazza, valorizza street. Se contiene un luogo specifico (negozio, stadio), valorizza description.
+- Se il testo contiene una via o piazza, valorizza street. Se contiene un luogo specifico (negozio, stadio), valorizza loc_description.
 - Non inventare dati non presenti nel testo.
 - Output solo i campi richiesti, senza spiegazioni né commenti.

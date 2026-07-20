@@ -66,7 +66,7 @@ def main():
             print(f"  Place:     {event.place}")
             print(f"  County:    {event.county or 'N/A'}")
             print(f"  Street:    {event.street or 'N/A'}")
-            print(f"  Description: {event.description or 'N/A'}")
+            print(f"  LocDescription: {event.loc_description or 'N/A'}")
             print(f"  Geocoded:  {event.geocoded_city or 'N/A'}")
             if event.latitude and event.longitude:
                 print(f"  Status: VALIDATED")

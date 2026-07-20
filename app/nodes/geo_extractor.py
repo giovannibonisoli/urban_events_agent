@@ -20,7 +20,7 @@ def _format_example(ex):
         f"place = {ex['place']}",
         f"county = {ex.get('county') or 'None'}",
         f"street = {ex.get('street') or 'None'}",
-        f"description = {ex.get('description') or 'None'}",
+        f"loc_description = {ex.get('loc_description') or 'None'}",
     ]
     output_text = "\n".join(lines)
     return {"input": input_text, "output": output_text}

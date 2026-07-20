@@ -51,7 +51,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
                 "place": event.place,
                 "county": event.county,
                 "street": event.street,
-                "description": event.description,
+                "loc_description": event.loc_description,
                 "start_date": {
                     "day": event.start_date.day,
                     "month": event.start_date.month,
@@ -75,7 +75,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
             print(f"  Place:     {event.place}")
             print(f"  County:    {event.county or 'N/A'}")
             print(f"  Street:    {event.street or 'N/A'}")
-            print(f"  Description: {event.description or 'N/A'}")
+            print(f"  LocDescription: {event.loc_description or 'N/A'}")
             print(f"  Geocoded:  {event.geocoded_city or 'N/A'}")
             if event.latitude and event.longitude:
                 print(f"  Status: VALIDATED")

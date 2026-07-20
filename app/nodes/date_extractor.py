@@ -110,7 +110,7 @@ def date_extractor(state: EventState) -> dict:
         place=geo.place,
         county=geo.county,
         street=geo.street,
-        description=geo.description,
+        loc_description=geo.loc_description,
         start_date=start_date or EventDate(),
         end_date=end_date,
     )
