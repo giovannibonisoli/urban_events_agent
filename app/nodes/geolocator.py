@@ -77,8 +77,7 @@ def _geocode_as_province(query: str) -> tuple[float, float, str] | None:
     return None
 
 
-def _geocode_place(query: str, place: str) -> tuple[float, float, str] | None:
-    print("Query:", query)
+def _geocode_and_match(query: str, place: str) -> tuple[float, float, str] | None:
     results = geolocator.geocode(
         query,
         exactly_one=False,
@@ -99,21 +98,32 @@ def _geocode_place(query: str, place: str) -> tuple[float, float, str] | None:
         if addresstype in ("city", "town") or "city" in address or "town" in address:
             return item.latitude, item.longitude, item.address
 
-    query_with_province = f"{query}, Modena"
-    results2 = geolocator.geocode(
-        query_with_province,
-        exactly_one=False,
-        language="it",
-        addressdetails=True,
-        limit=5,
-    )
+    return None
 
-    for item in results2 or []:
-        name = item.raw.get("name", "")
-        address = item.raw.get("address", {})
-        province = address.get("state", "")
-        if (place.lower() in name.lower() or name.lower() in place.lower()) and "modena" in province.lower():
-            return item.latitude, item.longitude, item.address
+
+def _geocode_place(query: str, place: str) -> tuple[float, float, str] | None:
+    print(f"  Trying: '{query}'")
+    match = _geocode_and_match(query, place)
+    if match:
+        return match
+
+    query_province = f"{query}, Modena"
+    print(f"  Trying: '{query_province}'")
+    match = _geocode_and_match(query_province, place)
+    if match:
+        return match
+
+    if query != place:
+        print(f"  Trying: '{place}'")
+        match = _geocode_and_match(place, place)
+        if match:
+            return match
+
+        place_province = f"{place}, Modena"
+        print(f"  Trying: '{place_province}'")
+        match = _geocode_and_match(place_province, place)
+        if match:
+            return match
 
     return None
 
@@ -141,6 +151,7 @@ def event_geolocator(state: dict) -> dict:
     print("\n========== GEO LOCATOR ==========")
 
     if state.get("event") is None:
+        print("  No event. Skipping.")
         return {"event": None}
 
     event = state["event"]
@@ -149,26 +160,43 @@ def event_geolocator(state: dict) -> dict:
 
     event.county = _validate_county(event.county)
 
-    if event.county is None and _is_province(event.place):
-        print(f"  Place '{event.place}' is a province. Geocoding for municipality.")
-        match = _geocode_as_province(event.place)
-        if match:
-            event.latitude, event.longitude, event.geocoded_city = match
-        return {"event": event}
-
-    if event.county is None:
-        print(f"  No county. Geocoding place '{event.place}'.")
+    if event.county:
+        print(f"  Flow: COUNTY PRESENT ({event.county})")
         query = _build_query(event)
         match = _geocode_place(query, event.place)
-
         if match:
             event.latitude, event.longitude, event.geocoded_city = match
-        return {"event": event}
+            print(f"  Result: VALIDATED")
+        else:
+            print(f"  Result: REJECTED (no match for query '{query}')")
+    else:
+        print(f"  Flow: NO COUNTY (place='{event.place}')")
+        if _is_province(event.place):
+            print(f"  Subflow: PLACE IS A PROVINCE")
+            if event.street is not None:
+                query = _build_query(event)
+                print(f"  Trying street+place query: '{query}'")
+                match = _geocode_place(query, event.place)
+                if match:
+                    event.latitude, event.longitude, event.geocoded_city = match
+                    print(f"  Result: VALIDATED (via street+place)")
+                    return {"event": event}
 
-    query = _build_query(event)
-    match = _geocode_and_validate(query, event.place)
-
-    if match:
-        event.latitude, event.longitude, event.geocoded_city = match
+            print(f"  Trying province fallback")
+            match = _geocode_as_province(event.place)
+            if match:
+                event.latitude, event.longitude, event.geocoded_city = match
+                print(f"  Result: VALIDATED (via province fallback)")
+            else:
+                print(f"  Result: REJECTED (no match)")
+        else:
+            query = _build_query(event)
+            print(f"  Subflow: STANDARD PLACE (query='{query}')")
+            match = _geocode_place(query, event.place)
+            if match:
+                event.latitude, event.longitude, event.geocoded_city = match
+                print(f"  Result: VALIDATED")
+            else:
+                print(f"  Result: REJECTED (no match)")
 
     return {"event": event}
