@@ -32,6 +32,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
                 "event_category": None,
                 "geo": None,
                 "event": None,
+                "extracted_info": None,
             }
         )
 
@@ -41,6 +42,7 @@ def process_articles(input_file: str, output_file: str, use_classifier: bool):
             "publication_date": item["publication date"],
             "is_event": state.get("is_event"),
             "event_category": state.get("event_category"),
+            "extracted_info": state.get("extracted_info"),
         }
 
         if event:

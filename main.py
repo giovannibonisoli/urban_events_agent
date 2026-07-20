@@ -41,6 +41,7 @@ def main():
                 "event_category": None,
                 "geo": None,
                 "event": None,
+                "extracted_info": None,
             }
         )
 
@@ -52,6 +53,12 @@ def main():
 
         print("\n=== EVENT ===")
         print(result["event"])
+
+        extracted = result.get("extracted_info")
+        if extracted:
+            print(f"\n=== EXTRACTED INFO ===")
+            for k, v in extracted.items():
+                print(f"  {k}: {v}")
 
         event = result.get("event")
         if event:

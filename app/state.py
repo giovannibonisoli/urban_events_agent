@@ -11,3 +11,4 @@ class EventState(TypedDict):
     event_category: Optional[str]
     geo: Optional[_GeoExtraction]
     event: Optional[Event]
+    extracted_info: Optional[dict[str, str]]

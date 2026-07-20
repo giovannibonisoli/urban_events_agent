@@ -62,6 +62,13 @@ def _unwrap_type(field_type):
 
 def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
     result = {}
+    dict_field = None
+    for name, info in schema.model_fields.items():
+        origin = getattr(info.annotation, "__origin__", None)
+        if origin is dict:
+            dict_field = name
+            break
+
     for line in text.strip().splitlines():
         line = line.strip()
         if not line or line.startswith("Ecco") or line.startswith("---"):
@@ -75,53 +82,55 @@ def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
         key = key.strip().strip("*").strip()
         value = value.strip()
 
-        if key not in schema.model_fields:
-            continue
+        if key in schema.model_fields:
+            field_info = schema.model_fields[key]
+            field_type = field_info.annotation
 
-        field_info = schema.model_fields[key]
-        field_type = field_info.annotation
+            if value in ("None", "null", ""):
+                args = getattr(field_type, "__args__", None)
+                if args and type(None) in args:
+                    result[key] = None
+                continue
 
-        if value in ("None", "null", ""):
-            args = getattr(field_type, "__args__", None)
-            if args and type(None) in args:
+            value = value.strip('"').strip("'")
+
+            origin = getattr(field_type, "__origin__", None)
+            if origin is type(None):
                 result[key] = None
-            continue
+                continue
 
-        value = value.strip('"').strip("'")
+            inner_type = _unwrap_type(field_type)
 
-        origin = getattr(field_type, "__origin__", None)
-        if origin is type(None):
-            result[key] = None
-            continue
-
-        inner_type = _unwrap_type(field_type)
-
-        if hasattr(inner_type, "model_fields"):
-            inner = {}
-            day_match = re.search(r"day=(\d+)", value)
-            month_match = re.search(r"month=(\d+)", value)
-            year_match = re.search(r"year=(\d+)", value)
-            if day_match:
-                inner["day"] = int(day_match.group(1))
-            if month_match:
-                inner["month"] = int(month_match.group(1))
-            if year_match:
-                inner["year"] = int(year_match.group(1))
-            result[key] = inner_type(**inner)
-        elif inner_type is bool:
-            result[key] = value.lower() in ("true", "1", "yes")
-        elif inner_type is int:
-            try:
-                result[key] = int(value)
-            except ValueError:
-                result[key] = None
-        elif inner_type is float:
-            try:
-                result[key] = float(value)
-            except ValueError:
-                result[key] = None
-        else:
-            result[key] = value
+            if hasattr(inner_type, "model_fields"):
+                inner = {}
+                day_match = re.search(r"day=(\d+)", value)
+                month_match = re.search(r"month=(\d+)", value)
+                year_match = re.search(r"year=(\d+)", value)
+                if day_match:
+                    inner["day"] = int(day_match.group(1))
+                if month_match:
+                    inner["month"] = int(month_match.group(1))
+                if year_match:
+                    inner["year"] = int(year_match.group(1))
+                result[key] = inner_type(**inner)
+            elif inner_type is bool:
+                result[key] = value.lower() in ("true", "1", "yes")
+            elif inner_type is int:
+                try:
+                    result[key] = int(value)
+                except ValueError:
+                    result[key] = None
+            elif inner_type is float:
+                try:
+                    result[key] = float(value)
+                except ValueError:
+                    result[key] = None
+            else:
+                result[key] = value
+        elif dict_field and key:
+            if dict_field not in result:
+                result[dict_field] = {}
+            result[dict_field][key] = value
 
     return schema(**result)
 
