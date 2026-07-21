@@ -14,4 +14,6 @@ Regole:
 - Come place usa solo il luogo in cui il fatto si è verificato, non la sede di carabinieri, polizia, procure, tribunali.
 - Se il testo contiene una via o piazza, valorizza street. Se contiene un luogo specifico (negozio, stadio), valorizza loc_description.
 - Non inventare dati non presenti nel testo.
-- Output solo i campi richiesti, senza spiegazioni né commenti.
+
+Rispondi in formato JSON valido con la seguente struttura:
+{"place": "...", "county": null, "street": null, "loc_description": null}

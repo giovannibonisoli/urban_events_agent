@@ -14,24 +14,12 @@ with open("app/prompts/examples/date_extractor_examples.json", encoding="utf-8")
     raw_examples = json.load(f)
 
 
-def _format_date(d):
-    if d is None:
-        return "None"
-    parts = []
-    if d.get("day") is not None:
-        parts.append(f"day={d['day']}")
-    if d.get("month") is not None:
-        parts.append(f"month={d['month']}")
-    if d.get("year") is not None:
-        parts.append(f"year={d['year']}")
-    return f"EventDate({', '.join(parts)})" if parts else "EventDate(day=None, month=None, year=None)"
-
-
 def _format_example(ex):
     input_text = f"Data di pubblicazione: {ex['publication_date']}\n\nArticolo:\n\n{ex['article']}"
-    start = _format_date(ex.get("start_date"))
-    end = _format_date(ex.get("end_date"))
-    output_text = f"start_date = {start}\nend_date = {end}"
+    output_text = json.dumps({
+        "start_date": ex.get("start_date"),
+        "end_date": ex.get("end_date"),
+    }, ensure_ascii=False)
     return {"input": input_text, "output": output_text}
 
 

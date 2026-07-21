@@ -6,17 +6,16 @@ Riceverai in input:
 
 Estrai le seguenti informazioni, basandoti solo sul contenuto esplicito dell'articolo:
 
-start_date = data di inizio dell'evento con day, month, year. Usa None per i campi non determinabili.
-end_date = data di fine dell'evento, solo se dura più giorni. Se l'evento dura un solo giorno, end_date = None.
+start_date: data di inizio dell'evento con day, month, year. Usa null per i campi non determinabili.
+end_date: data di fine dell'evento, solo se dura più giorni. Se l'evento dura un solo giorno, end_date = null.
 
 Regole:
 - Se la data è esplicita (es. "6 luglio", "10 aprile"), inserisci giorno, mese e anno.
 - Se la data è relativa (oggi, ieri, scorso, sabato prossimo), calcola la data effettiva dalla data di pubblicazione.
-- Se non è possibile determinare la data, lascia i campi a None.
+- Se non è possibile determinare la data, lascia i campi a null.
 - Mantieni il massimo livello di precisione disponibile.
 
-Output solo i campi richiesti, senza spiegazioni né commenti, nel formato esatto:
-start_date = EventDate(day=..., month=..., year=...)
-end_date = None
+Rispondi in formato JSON valido con la seguente struttura:
+{"start_date": {"day": null, "month": null, "year": null}, "end_date": null}
 oppure
-end_date = EventDate(day=..., month=..., year=...)
+{"start_date": {"day": 6, "month": 7, "year": 2026}, "end_date": null}

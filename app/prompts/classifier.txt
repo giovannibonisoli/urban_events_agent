@@ -20,5 +20,5 @@ Regole importanti:
 2. Se l'articolo parla di tendenze, classifiche, opinioni, indiscrezioni, valutazioni, o non descrive un evento specifico già avvenuto o programmato, usa la categoria "Altro".
 3. Se l'articolo descrive un evento reale ma non rientra nelle categorie specifiche elencate, usa "Altro".
 
-Rispondi con:
-- event_category: la categoria predefinita più appropriata
+Rispondi in formato JSON valido con la seguente struttura:
+{"event_category": "Cultura e spettacolo"}

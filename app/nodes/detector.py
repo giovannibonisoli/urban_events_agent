@@ -16,7 +16,7 @@ with open("app/prompts/examples/detector_examples.json", encoding="utf-8") as f:
 
 def _format_example(ex):
     input_text = f"Articolo:\n\n{ex['article']}"
-    output_text = f"is_event={'true' if ex['is_event'] else 'false'}"
+    output_text = json.dumps({"is_event": ex["is_event"]})
     return {"input": input_text, "output": output_text}
 
 

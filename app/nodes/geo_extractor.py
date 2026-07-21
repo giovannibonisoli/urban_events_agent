@@ -16,13 +16,12 @@ with open("app/prompts/examples/geo_extractor_examples.json", encoding="utf-8") 
 
 def _format_example(ex):
     input_text = f"Articolo:\n\n{ex['article']}"
-    lines = [
-        f"place = {ex['place']}",
-        f"county = {ex.get('county') or 'None'}",
-        f"street = {ex.get('street') or 'None'}",
-        f"loc_description = {ex.get('loc_description') or 'None'}",
-    ]
-    output_text = "\n".join(lines)
+    output_text = json.dumps({
+        "place": ex["place"],
+        "county": ex.get("county"),
+        "street": ex.get("street"),
+        "loc_description": ex.get("loc_description"),
+    }, ensure_ascii=False)
     return {"input": input_text, "output": output_text}
 
 

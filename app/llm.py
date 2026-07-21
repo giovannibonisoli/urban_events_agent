@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 from typing import Type
@@ -51,88 +52,17 @@ def _make_llm(model: str):
         raise ValueError(f"Unknown provider: {provider}")
 
 
-def _unwrap_type(field_type):
-    args = getattr(field_type, "__args__", None)
-    if args:
-        for arg in args:
-            if arg is not type(None):
-                return arg
-    return field_type
-
-
 def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
-    result = {}
-    dict_field = None
-    for name, info in schema.model_fields.items():
-        origin = getattr(info.annotation, "__origin__", None)
-        if origin is dict:
-            dict_field = name
-            break
+    json_match = re.search(r"```(?:json)?\s*([\s\S]*?)```", text)
+    if json_match:
+        text = json_match.group(1)
+    else:
+        brace_match = re.search(r"\{[\s\S]*\}", text)
+        if brace_match:
+            text = brace_match.group(0)
 
-    for line in text.strip().splitlines():
-        line = line.strip()
-        if not line or line.startswith("Ecco") or line.startswith("---"):
-            continue
-        line = re.sub(r"^\*\s+", "", line)
-        line = line.replace("**", "")
-        sep = "=" if "=" in line else ":" if ":" in line else None
-        if sep is None:
-            continue
-        key, _, value = line.partition(sep)
-        key = key.strip().strip("*").strip()
-        value = value.strip()
-
-        if key in schema.model_fields:
-            field_info = schema.model_fields[key]
-            field_type = field_info.annotation
-
-            if value in ("None", "null", ""):
-                args = getattr(field_type, "__args__", None)
-                if args and type(None) in args:
-                    result[key] = None
-                continue
-
-            value = value.strip('"').strip("'")
-
-            origin = getattr(field_type, "__origin__", None)
-            if origin is type(None):
-                result[key] = None
-                continue
-
-            inner_type = _unwrap_type(field_type)
-
-            if hasattr(inner_type, "model_fields"):
-                inner = {}
-                day_match = re.search(r"day=(\d+)", value)
-                month_match = re.search(r"month=(\d+)", value)
-                year_match = re.search(r"year=(\d+)", value)
-                if day_match:
-                    inner["day"] = int(day_match.group(1))
-                if month_match:
-                    inner["month"] = int(month_match.group(1))
-                if year_match:
-                    inner["year"] = int(year_match.group(1))
-                result[key] = inner_type(**inner)
-            elif inner_type is bool:
-                result[key] = value.lower() in ("true", "1", "yes")
-            elif inner_type is int:
-                try:
-                    result[key] = int(value)
-                except ValueError:
-                    result[key] = None
-            elif inner_type is float:
-                try:
-                    result[key] = float(value)
-                except ValueError:
-                    result[key] = None
-            else:
-                result[key] = value
-        elif dict_field and key:
-            if dict_field not in result:
-                result[dict_field] = {}
-            result[dict_field][key] = value
-
-    return schema(**result)
+    data = json.loads(text)
+    return schema(**data)
 
 
 def structured_llm(llm, schema: Type[BaseModel]):

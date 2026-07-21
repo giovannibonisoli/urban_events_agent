@@ -16,7 +16,7 @@ with open("app/prompts/examples/classifier_examples.json", encoding="utf-8") as 
 
 def _format_example(ex):
     input_text = f"Articolo:\n\n{ex['article']}"
-    output_text = f"event_category = {ex['event_category']}"
+    output_text = json.dumps({"event_category": ex["event_category"]}, ensure_ascii=False)
     return {"input": input_text, "output": output_text}
 
 

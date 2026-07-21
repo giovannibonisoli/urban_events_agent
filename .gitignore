@@ -35,7 +35,7 @@ ENV/
 .env
 .env.*
 
-#
+# Logs
 logs
 
 # OS files
