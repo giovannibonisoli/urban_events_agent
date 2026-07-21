@@ -48,6 +48,15 @@ def _make_llm(model: str):
             )
         return ChatHuggingFace(llm=llm)
 
+    elif provider == "openai":
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(
+            model=model,
+            temperature=0,
+            api_key=cfg.get("api_key"),
+            base_url=cfg.get("base_url"),
+        )
+
     else:
         raise ValueError(f"Unknown provider: {provider}")
 
@@ -68,7 +77,7 @@ def _parse_output(text: str, schema: Type[BaseModel]) -> BaseModel:
 def structured_llm(llm, schema: Type[BaseModel]):
     provider = _load_config()["llm"]["provider"]
 
-    if provider == "ollama":
+    if provider in ("ollama", "openai"):
         return llm.with_structured_output(schema)
 
     from langchain_core.messages import HumanMessage
