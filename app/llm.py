@@ -32,7 +32,7 @@ def _make_llm(model: str):
             model_id=model,
             task="text-generation",
             model_kwargs={"device_map": "auto", "use_cache": False},
-            pipeline_kwargs={"do_sample": False, "max_new_tokens": 1024, "return_full_text": False},
+            pipeline_kwargs={"do_sample": False, "max_new_tokens": 4096, "return_full_text": False},
         )
         tokenizer = llm.pipeline.tokenizer
         if not getattr(tokenizer, "chat_template", None):

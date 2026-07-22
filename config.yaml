@@ -2,6 +2,7 @@ llm:
   provider: huggingface
   detection_model: meta-llama/Meta-Llama-3-8B-Instruct
   extraction_model: meta-llama/Meta-Llama-3-8B-Instruct
+  scraper_model: inference-net/Schematron-8B
 
   # provider: ollama
   # detection_model: llama3.2:3b
