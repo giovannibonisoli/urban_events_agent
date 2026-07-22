@@ -2,6 +2,7 @@ from langgraph.graph import StateGraph, START, END
 
 from app.state import EventState
 from app.nodes import event_detector, event_classifier, geo_extractor, date_extractor, event_geolocator, info_extractor
+from app.timing import timed_node
 
 
 def _after_detector(state: EventState) -> str:
@@ -18,13 +19,13 @@ def _after_classifier(state: EventState) -> str:
 
 builder = StateGraph(EventState)
 
-# Nodes
-builder.add_node("detector", event_detector)
-builder.add_node("classifier", event_classifier)
-builder.add_node("geo_extractor", geo_extractor)
-builder.add_node("date_extractor", date_extractor)
-builder.add_node("geolocator", event_geolocator)
-builder.add_node("info_extractor", info_extractor)
+# Nodes with timing
+builder.add_node("detector", timed_node(event_detector))
+builder.add_node("classifier", timed_node(event_classifier))
+builder.add_node("geo_extractor", timed_node(geo_extractor))
+builder.add_node("date_extractor", timed_node(date_extractor))
+builder.add_node("geolocator", timed_node(event_geolocator))
+builder.add_node("info_extractor", timed_node(info_extractor))
 
 # Edges
 builder.add_edge(START, "detector")

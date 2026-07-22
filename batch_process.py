@@ -1,8 +1,10 @@
 import json
+import time
 import argparse
 from pathlib import Path
 
 from app.graph import graph
+from app.timing import clear_timing_log, record_timing
 
 
 def process_articles(input_file: str, output_file: str):
@@ -13,6 +15,8 @@ def process_articles(input_file: str, output_file: str):
         print(f"Input file {input_path} not found.")
         return
 
+    clear_timing_log()
+
     with open(input_path, encoding="utf-8") as f:
         items = json.load(f)
 
@@ -20,6 +24,8 @@ def process_articles(input_file: str, output_file: str):
 
     for i, item in enumerate(items, 1):
         print(f"\n[{i}/{len(items)}] Processing: {item['news text'][:80]}...")
+
+        article_start = time.time()
 
         state = graph.invoke(
             {
@@ -32,6 +38,10 @@ def process_articles(input_file: str, output_file: str):
                 "extracted_info": None,
             }
         )
+
+        article_duration = time.time() - article_start
+        record_timing("total_article", article_duration, i)
+        print(f"  [total_article] {article_duration:.3f}s")
 
         event = state.get("event")
         entry = {
