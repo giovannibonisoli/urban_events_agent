@@ -13,6 +13,6 @@ Regole:
 - Massimo 10 informazioni.
 
 Rispondi in formato JSON valido con la seguente struttura:
-{"eta_1": "valore_1", "eta_2": "valore_2"}
+{{"eta_1": "valore_1", "eta_2": "valore_2"}}
 oppure
-{} (se non ci sono informazioni da estrarre)
+{{}} (se non ci sono informazioni da estrarre)

@@ -16,6 +16,6 @@ Regole:
 - Mantieni il massimo livello di precisione disponibile.
 
 Rispondi in formato JSON valido con la seguente struttura:
-{"start_date": {"day": null, "month": null, "year": null}, "end_date": null}
+{{"start_date": {{"day": null, "month": null, "year": null}}, "end_date": null}}
 oppure
-{"start_date": {"day": 6, "month": 7, "year": 2026}, "end_date": null}
+{{"start_date": {{"day": 6, "month": 7, "year": 2026}}, "end_date": null}}

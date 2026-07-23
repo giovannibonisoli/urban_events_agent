@@ -25,4 +25,4 @@ REGOLE FONDAMENTALI SULLA GRANULARITÀ (ATTENZIONE!):
   Eccezione (is_event=true): se l'articolo descrive UNO di quei 5 concerti con dettagli precisi di data, luogo e orario, allora quel singolo concerto è un evento (e l'articolo va classificato come SI).
 
 Rispondi in formato JSON valido con la seguente struttura:
-{"is_event": true}
+{{"is_event": true}}

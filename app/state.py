@@ -7,6 +7,7 @@ from app.models.event import Event, _GeoExtraction
 class EventState(TypedDict):
     article: str
     publication_date: str
+    editorial_location: str
     is_event: Optional[bool]
     event_category: Optional[str]
     geo: Optional[_GeoExtraction]

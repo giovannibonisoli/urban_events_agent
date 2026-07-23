@@ -16,4 +16,4 @@ Regole:
 - Non inventare dati non presenti nel testo.
 
 Rispondi in formato JSON valido con la seguente struttura:
-{"place": "...", "county": null, "street": null, "loc_description": null}
+{{"place": "...", "county": null, "street": null, "loc_description": null}}

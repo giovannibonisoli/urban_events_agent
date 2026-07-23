@@ -21,4 +21,4 @@ Regole importanti:
 3. Se l'articolo descrive un evento reale ma non rientra nelle categorie specifiche elencate, usa "Altro".
 
 Rispondi in formato JSON valido con la seguente struttura:
-{"event_category": "Cultura e spettacolo"}
+{{"event_category": "Cultura e spettacolo"}}

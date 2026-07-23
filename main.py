@@ -13,7 +13,7 @@ def main():
         return
 
     with open(DATA_FILE, encoding="utf-8") as f:
-        items = json.load(f)
+        items = json.load(f, strict=False)
 
     for i, item in enumerate(items, 1):
         print("\n" + "=" * 80)
@@ -24,6 +24,7 @@ def main():
             {
                 "article": item["news text"],
                 "publication_date": item["publication date"],
+                "editorial_location": item["editorial_location"],
                 "is_event": None,
                 "event_category": None,
                 "geo": None,

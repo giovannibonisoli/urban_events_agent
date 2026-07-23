@@ -18,7 +18,7 @@ def process_articles(input_file: str, output_file: str):
     clear_timing_log()
 
     with open(input_path, encoding="utf-8") as f:
-        items = json.load(f)
+        items = json.load(f, strict=False)
 
     results = []
 
@@ -31,6 +31,7 @@ def process_articles(input_file: str, output_file: str):
             {
                 "article": item["news text"],
                 "publication_date": item["publication date"],
+                "editorial_location": item["editorial_location"],
                 "is_event": None,
                 "event_category": None,
                 "geo": None,
