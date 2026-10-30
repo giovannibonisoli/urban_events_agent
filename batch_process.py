@@ -33,6 +33,8 @@ def process_articles(input_file: str, output_file: str):
                 "publication_date": item["publication date"],
                 "editorial_location": item["editorial_location"],
                 "is_event": None,
+                "events": None,
+                "multi_event": None,
                 "event_category": None,
                 "geo": None,
                 "event": None,
@@ -49,6 +51,8 @@ def process_articles(input_file: str, output_file: str):
             "article": item["news text"],
             "publication_date": item["publication date"],
             "is_event": state.get("is_event"),
+            "events": state.get("events"),
+            "multi_event": state.get("multi_event"),
             "event_category": state.get("event_category"),
             "extracted_info": state.get("extracted_info"),
         }

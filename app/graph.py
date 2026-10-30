@@ -6,9 +6,10 @@ from app.timing import timed_node
 
 
 def _after_detector(state: EventState) -> str:
-    if not state.get("is_event"):
-        return "end"
-    return "classifier"
+    # TEMPORARILY DISCONNECTED from the classifier: the detector now returns a
+    # list of events. Reconnect to the classifier once the downstream agents
+    # are adapted to the new output format.
+    return "end"
 
 
 def _after_classifier(state: EventState) -> str:
@@ -29,7 +30,7 @@ builder.add_node("info_extractor", timed_node(info_extractor))
 
 # Edges
 builder.add_edge(START, "detector")
-builder.add_conditional_edges("detector", _after_detector, {"classifier": "classifier", "end": END})
+builder.add_conditional_edges("detector", _after_detector, {"end": END})
 builder.add_conditional_edges("classifier", _after_classifier, {"geo_extractor": "geo_extractor", "end": END})
 builder.add_edge("geo_extractor", "date_extractor")
 builder.add_edge("date_extractor", "geolocator")

@@ -1,5 +1,10 @@
 from pydantic import BaseModel
 
 
+class EventItem(BaseModel):
+    title: str = ""
+    is_main: bool = False
+
+
 class DetectionResult(BaseModel):
-    is_event: bool = False
+    events: list[EventItem] = []

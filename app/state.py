@@ -9,6 +9,8 @@ class EventState(TypedDict):
     publication_date: str
     editorial_location: str
     is_event: Optional[bool]
+    events: Optional[list]
+    multi_event: Optional[str]
     event_category: Optional[str]
     geo: Optional[_GeoExtraction]
     event: Optional[Event]

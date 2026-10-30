@@ -63,5 +63,19 @@ def main():
                 print(f"  Status: REJECTED (no match found)")
 
 
+        # Temporary save
+        with open("data/main_results.json", "w", encoding="utf-8") as f:
+            json.dump(
+                {
+                    "is_event": result.get("is_event"),
+                    "events": result.get("events"),
+                    "multi_event": result.get("multi_event"),
+                },
+                f,
+                ensure_ascii=False,
+                indent=2,
+            )
+
+
 if __name__ == "__main__":
     main()
