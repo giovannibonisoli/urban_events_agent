@@ -35,10 +35,6 @@ def process_articles(input_file: str, output_file: str):
                 "is_event": None,
                 "events": None,
                 "multi_event": None,
-                "event_category": None,
-                "geo": None,
-                "event": None,
-                "extracted_info": None,
             }
         )
 
@@ -46,57 +42,17 @@ def process_articles(input_file: str, output_file: str):
         record_timing("total_article", article_duration, i)
         print(f"  [total_article] {article_duration:.3f}s")
 
-        event = state.get("event")
         entry = {
             "article": item["news text"],
             "publication_date": item["publication date"],
             "is_event": state.get("is_event"),
             "events": state.get("events"),
             "multi_event": state.get("multi_event"),
-            "extracted_info": state.get("extracted_info"),
         }
 
-        if event:
-            entry["event"] = {
-                "category": event.category,
-                "place": event.place,
-                "county": event.county,
-                "street": event.street,
-                "loc_description": event.loc_description,
-                "start_date": {
-                    "day": event.start_date.day,
-                    "month": event.start_date.month,
-                    "year": event.start_date.year,
-                },
-                "end_date": {
-                    "day": event.end_date.day,
-                    "month": event.end_date.month,
-                    "year": event.end_date.year,
-                } if event.end_date else None,
-                "latitude": event.latitude,
-                "longitude": event.longitude,
-                "geocoded_city": event.geocoded_city,
-                "extracted_info": event.extracted_info,
-            }
-        else:
-            entry["event"] = None
-
         results.append(entry)
-        if event:
-            print(f"\n=== GEOLOCATION ===")
-            print(f"  Place:     {event.place}")
-            print(f"  County:    {event.county or 'N/A'}")
-            print(f"  Street:    {event.street or 'N/A'}")
-            print(f"  LocDescription: {event.loc_description or 'N/A'}")
-            print(f"  Geocoded:  {event.geocoded_city or 'N/A'}")
-            if event.latitude and event.longitude:
-                print(f"  Status: VALIDATED")
-                print(f"  Lat: {event.latitude}, Lng: {event.longitude}")
-                print(f"  Google Maps: https://www.google.com/maps?q={event.latitude},{event.longitude}")
-            else:
-                print(f"  Status: REJECTED (no match found)")
-        else:
-            print(f"  -> is_event={entry['is_event']}, category={entry.get('event_category', 'N/A')}")
+
+        print(f"  -> is_event={entry['is_event']}")
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)

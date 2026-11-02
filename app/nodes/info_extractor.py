@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from app.llm import extraction_llm, structured_llm
 from app.models.info_extractor import ExtractedInfo
-from app.state import EventState
+from app.state import NewsArticleState
 
 
 SYSTEM_PROMPT = Path("app/prompts/info_extractor.txt").read_text(encoding="utf-8")
@@ -17,7 +17,7 @@ full_prompt = ChatPromptTemplate.from_messages([
 structured_info = structured_llm(extraction_llm, ExtractedInfo)
 
 
-def info_extractor(state: EventState) -> dict:
+def info_extractor(state: NewsArticleState) -> dict:
 
     print("\n========== INFO EXTRACTOR ==========")
 

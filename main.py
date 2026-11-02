@@ -26,42 +26,13 @@ def main():
                 "publication_date": item["publication date"],
                 "editorial_location": item["editorial_location"],
                 "is_event": None,
-                "event_category": None,
-                "geo": None,
-                "event": None,
-                "extracted_info": None,
+                "events": None,
+                "multi_event": None,
             }
         )
 
         print("\n=== FINAL STATE ===")
         print(result)
-
-        print(f"\n  Category: {result.get('event_category', 'N/A')}")
-
-        print("\n=== EVENT ===")
-        print(result["event"])
-
-        extracted = result.get("extracted_info")
-        if extracted:
-            print(f"\n=== EXTRACTED INFO ===")
-            for k, v in extracted.items():
-                print(f"  {k}: {v}")
-
-        event = result.get("event")
-        if event:
-            print(f"\n=== GEOLOCATION ===")
-            print(f"  Place:     {event.place}")
-            print(f"  County:    {event.county or 'N/A'}")
-            print(f"  Street:    {event.street or 'N/A'}")
-            print(f"  LocDescription: {event.loc_description or 'N/A'}")
-            print(f"  Geocoded:  {event.geocoded_city or 'N/A'}")
-            if event.latitude and event.longitude:
-                print(f"  Status: VALIDATED")
-                print(f"  Lat: {event.latitude}, Lng: {event.longitude}")
-                print(f"  Google Maps: https://www.google.com/maps?q={event.latitude},{event.longitude}")
-            else:
-                print(f"  Status: REJECTED (no match found)")
-
 
         # Temporary save
         with open("data/main_results.json", "w", encoding="utf-8") as f:

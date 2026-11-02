@@ -5,7 +5,7 @@ from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptT
 
 from app.llm import extraction_llm, structured_llm
 from app.models.event import _DateExtraction, EventDate
-from app.state import EventState
+from app.state import NewsArticleState
 
 
 SYSTEM_PROMPT = Path("app/prompts/date_extractor.txt").read_text(encoding="utf-8")
@@ -67,12 +67,12 @@ def _normalize_end_date(end_date: EventDate | None) -> EventDate | None:
     return end_date
 
 
-def date_extractor(state: EventState) -> dict:
+def date_extractor(state: NewsArticleState) -> dict:
     print("\n========== DATE EXTRACTOR ==========")
 
     if not state["is_event"]:
         print("No event found. Skipping extraction.")
-        return {"event": None}
+        return {}
 
     messages = full_prompt.format_messages(
         publication_date=state["publication_date"],
@@ -87,24 +87,7 @@ def date_extractor(state: EventState) -> dict:
     end_date = _validate_date(raw.end_date, "end_date")
     end_date = _normalize_end_date(end_date)
 
-    geo = state.get("geo")
-    if geo is None:
-        return {"event": None}
+    print(f"  start_date: {start_date}")
+    print(f"  end_date:   {end_date}")
 
-    from app.models.event import Event
-
-    event = Event(
-        category=state.get("event_category") or "",
-        place=geo.place,
-        county=geo.county,
-        street=geo.street,
-        loc_description=geo.loc_description,
-        start_date=start_date or EventDate(),
-        end_date=end_date,
-        extracted_info=state.get("extracted_info"),
-    )
-
-    print("Merged Event:")
-    print(event)
-
-    return {"event": event}
+    return {}

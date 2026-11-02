@@ -5,7 +5,7 @@ from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptT
 
 from app.llm import extraction_llm, structured_llm
 from app.models.event import _GeoExtraction
-from app.state import EventState
+from app.state import NewsArticleState
 
 
 SYSTEM_PROMPT = Path("app/prompts/geo_extractor.txt").read_text(encoding="utf-8")
@@ -44,7 +44,7 @@ full_prompt = ChatPromptTemplate.from_messages([
 structured_geo = structured_llm(extraction_llm, _GeoExtraction)
 
 
-def geo_extractor(state: EventState) -> dict:
+def geo_extractor(state: NewsArticleState) -> dict:
     print("\n========== GEO EXTRACTOR ==========")
 
     if not state["is_event"]:

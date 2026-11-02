@@ -5,7 +5,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from app.llm import extraction_llm, structured_llm
 from app.models.temporal_extractor import TemporalExtractionResult
-from app.state import EventState
+from app.state import NewsArticleState
 
 
 SYSTEM_PROMPT = Path("app/prompts/temporal_extractor.txt").read_text(encoding="utf-8")
@@ -18,7 +18,7 @@ full_prompt = ChatPromptTemplate.from_messages([
 structured_temporal = structured_llm(extraction_llm, TemporalExtractionResult)
 
 
-def event_temporal_extractor(state: EventState):
+def event_temporal_extractor(state: NewsArticleState):
     print("\n========== TEMPORAL EXTRACTOR ==========")
 
     events = state.get("events") or []

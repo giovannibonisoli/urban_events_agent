@@ -6,7 +6,7 @@ from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptT
 
 from app.llm import detection_llm, structured_llm
 from app.models.detection import DetectionResult
-from app.state import EventState
+from app.state import NewsArticleState
 
 
 SYSTEM_PROMPT = Path("app/prompts/detector.txt").read_text(encoding="utf-8")
@@ -61,7 +61,7 @@ def _derive_multi_event(events: list) -> Optional[str]:
     return "multiple"
 
 
-def event_detector(state: EventState):
+def event_detector(state: NewsArticleState):
     print("\n========== EVENT DETECTOR ==========")
 
     messages = full_prompt.format_messages(article=state["article"])

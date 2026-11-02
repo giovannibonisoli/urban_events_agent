@@ -5,7 +5,7 @@ from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptT
 
 from app.llm import detection_llm, structured_llm
 from app.models.classifier import ClassificationResult
-from app.state import EventState
+from app.state import NewsArticleState
 
 
 SYSTEM_PROMPT = Path("app/prompts/classifier.txt").read_text(encoding="utf-8")
@@ -39,7 +39,7 @@ full_prompt = ChatPromptTemplate.from_messages([
 structured_classifier = structured_llm(detection_llm, ClassificationResult)
 
 
-def event_classifier(state: EventState):
+def event_classifier(state: NewsArticleState):
     print("\n========== EVENT CLASSIFIER ==========")
 
     events = state.get("events") or []
