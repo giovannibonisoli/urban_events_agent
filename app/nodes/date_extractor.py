@@ -15,7 +15,12 @@ with open("app/prompts/examples/date_extractor_examples.json", encoding="utf-8")
 
 
 def _format_example(ex):
-    input_text = f"Data di pubblicazione: {ex['publication_date']}\n\nArticolo:\n\n{ex['article']}"
+    input_text = (
+        f"Data di pubblicazione: {ex['publication_date']}\n\n"
+        f"Articolo:\n\n{ex['article']}\n\n"
+        f"Espressioni temporali estratte per l'evento:\n\n"
+        f"{json.dumps(ex.get('temporal_spans', []), ensure_ascii=False)}"
+    )
     output_text = json.dumps({
         "start_date": ex.get("start_date"),
         "end_date": ex.get("end_date"),
@@ -36,7 +41,12 @@ few_shot_prompt = FewShotChatMessagePromptTemplate(
 full_prompt = ChatPromptTemplate.from_messages([
     ("system", SYSTEM_PROMPT),
     few_shot_prompt,
-    ("human", "Data di pubblicazione: {publication_date}\n\nArticolo:\n\n{article}"),
+    (
+        "human",
+        "Data di pubblicazione: {publication_date}\n\n"
+        "Articolo:\n\n{article}\n\n"
+        "Espressioni temporali estratte per l'evento:\n\n{temporal_spans}",
+    ),
 ])
 
 structured_date = structured_llm(extraction_llm, _DateExtraction)
@@ -67,6 +77,13 @@ def _normalize_end_date(end_date: EventDate | None) -> EventDate | None:
     return end_date
 
 
+def _date_to_dict(date: EventDate | None) -> dict:
+    # Dates are always represented as an object, even when not computable.
+    if date is None:
+        return {"day": None, "month": None, "year": None}
+    return {"day": date.day, "month": date.month, "year": date.year}
+
+
 def date_extractor(state: NewsArticleState) -> dict:
     print("\n========== DATE EXTRACTOR ==========")
 
@@ -74,20 +91,35 @@ def date_extractor(state: NewsArticleState) -> dict:
         print("No event found. Skipping extraction.")
         return {}
 
-    messages = full_prompt.format_messages(
-        publication_date=state["publication_date"],
-        article=state["article"],
-    )
-    raw = structured_date.invoke(messages)
+    events = state.get("events") or []
+    enriched_events = []
 
-    print("Extracted Dates:")
-    print(raw)
+    for ev in events:
+        if not isinstance(ev, dict):
+            enriched_events.append(ev)
+            continue
 
-    start_date = _validate_date(raw.start_date, "start_date")
-    end_date = _validate_date(raw.end_date, "end_date")
-    end_date = _normalize_end_date(end_date)
+        temporal_spans = ev.get("temporal_spans") or []
 
-    print(f"  start_date: {start_date}")
-    print(f"  end_date:   {end_date}")
+        messages = full_prompt.format_messages(
+            publication_date=state["publication_date"],
+            article=state["article"],
+            temporal_spans=json.dumps(temporal_spans, ensure_ascii=False),
+        )
+        raw = structured_date.invoke(messages)
 
-    return {}
+        print(f"\nEvent: {ev.get('title', '')}")
+        print(f"  Temporal expressions: {temporal_spans}")
+        print(f"  Raw dates: {raw}")
+
+        start_date = _validate_date(raw.start_date, "start_date")
+        end_date = _validate_date(raw.end_date, "end_date")
+        end_date = _normalize_end_date(end_date)
+
+        enriched_events.append({
+            **ev,
+            "start_date": _date_to_dict(start_date),
+            "end_date": _date_to_dict(end_date),
+        })
+
+    return {"events": enriched_events}

@@ -1,0 +1,24 @@
+[
+  {
+    "article": "La Fiera di San Giuseppe si terrà sabato 16 pomeriggio e domenica 17 marzo, dalle 15 alle 23. L'edizione 2024 sarà inaugurata venerdì 15 marzo alle ore 18.",
+    "spans": [
+      "sabato 16 pomeriggio",
+      "domenica 17 marzo",
+      "dalle 15 alle 23",
+      "2024",
+      "venerdì 15 marzo",
+      "alle ore 18"
+    ]
+  },
+  {
+    "article": "I carabinieri hanno fermato tre persone a San Lazzaro di Savena dopo un furto in abitazione. I militari hanno recuperato gioielli e orologi.",
+    "spans": []
+  },
+  {
+    "article": "Il concerto si terrà il 6 luglio alle 21:00 in piazza Martiri. In caso di pioggia, l'evento sarà rinviato alla settimana successiva.",
+    "spans": [
+      "il 6 luglio",
+      "alle 21:00"
+    ]
+  }
+]
