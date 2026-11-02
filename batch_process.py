@@ -18,7 +18,7 @@ def process_articles(input_file: str, output_file: str):
     clear_timing_log()
 
     with open(input_path, encoding="utf-8") as f:
-        items = json.load(f, strict=False)
+        items = json.load(f, strict=False)[:2]
 
     results = []
 
