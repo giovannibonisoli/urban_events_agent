@@ -53,7 +53,6 @@ def process_articles(input_file: str, output_file: str):
             "is_event": state.get("is_event"),
             "events": state.get("events"),
             "multi_event": state.get("multi_event"),
-            "event_category": state.get("event_category"),
             "extracted_info": state.get("extracted_info"),
         }
 

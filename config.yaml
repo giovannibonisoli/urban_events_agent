@@ -6,7 +6,7 @@ llm:
 
   provider: ollama
   detection_model: llama3.2:3b
-  extraction_model: qwen2.5:7b
+  extraction_model: llama3.2:3b
   # scraper_model: richardyoung/schematron-8b:Q4_K_M
 
 

@@ -6,16 +6,14 @@ from app.timing import timed_node
 
 
 def _after_detector(state: EventState) -> str:
-    # TEMPORARILY DISCONNECTED from the classifier: the detector now returns a
-    # list of events. Reconnect to the classifier once the downstream agents
-    # are adapted to the new output format.
-    return "end"
+    if not state.get("is_event"):
+        return "end"
+    return "classifier"
 
 
 def _after_classifier(state: EventState) -> str:
-    if state.get("event_category") == "Altro":
-        return "end"
-    return "geo_extractor"
+    # TEMPORARILY STOPPED AFTER CLASSIFIER: the next step (geo_extractor) can be re-enabled later.
+    return "end"
 
 
 builder = StateGraph(EventState)
@@ -30,8 +28,8 @@ builder.add_node("info_extractor", timed_node(info_extractor))
 
 # Edges
 builder.add_edge(START, "detector")
-builder.add_conditional_edges("detector", _after_detector, {"end": END})
-builder.add_conditional_edges("classifier", _after_classifier, {"geo_extractor": "geo_extractor", "end": END})
+builder.add_conditional_edges("detector", _after_detector, {"classifier": "classifier", "end": END})
+builder.add_conditional_edges("classifier", _after_classifier, {"end": END})
 builder.add_edge("geo_extractor", "date_extractor")
 builder.add_edge("date_extractor", "geolocator")
 builder.add_edge("geolocator", "info_extractor")
