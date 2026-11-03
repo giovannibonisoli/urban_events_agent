@@ -23,6 +23,8 @@ def main():
         result = graph.invoke(
             {
                 "article": item["news text"],
+                "article_title": item.get("title") or "",
+                "article_subtitle": item.get("subtitle") or "",
                 "publication_date": item["publication date"],
                 "editorial_location": item["editorial_location"],
                 "is_event": None,

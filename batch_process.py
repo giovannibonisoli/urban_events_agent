@@ -18,7 +18,9 @@ def process_articles(input_file: str, output_file: str):
     clear_timing_log()
 
     with open(input_path, encoding="utf-8") as f:
-        items = json.load(f, strict=False)[:2]
+        items = json.load(f, strict=False)
+
+    items = items[:2] # + [items[5], items[7]]
 
     results = []
 
@@ -30,6 +32,8 @@ def process_articles(input_file: str, output_file: str):
         state = graph.invoke(
             {
                 "article": item["news text"],
+                "article_title": item.get("title") or "",
+                "article_subtitle": item.get("subtitle") or "",
                 "publication_date": item["publication date"],
                 "editorial_location": item["editorial_location"],
                 "is_event": None,
@@ -43,6 +47,8 @@ def process_articles(input_file: str, output_file: str):
         print(f"  [total_article] {article_duration:.3f}s")
 
         entry = {
+            "title": item.get("title") or "",
+            "subtitle": item.get("subtitle") or "",
             "article": item["news text"],
             "publication_date": item["publication date"],
             "is_event": state.get("is_event"),

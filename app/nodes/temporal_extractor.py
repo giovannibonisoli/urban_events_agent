@@ -15,7 +15,7 @@ with open("app/prompts/examples/temporal_extractor_examples.json", encoding="utf
 
 
 def _format_example(ex):
-    input_text = f"Articolo:\n\n{ex['article']}"
+    input_text = f"Evento da analizzare: {ex['event']}\n\nArticolo:\n\n{ex['article']}"
     output_text = json.dumps({"spans": ex.get("spans", [])}, ensure_ascii=False)
     return {"input": input_text, "output": output_text}
 
@@ -33,7 +33,7 @@ few_shot_prompt = FewShotChatMessagePromptTemplate(
 full_prompt = ChatPromptTemplate.from_messages([
     ("system", SYSTEM_PROMPT),
     few_shot_prompt,
-    ("human", "Articolo:\n\n{article}"),
+    ("human", "Evento da analizzare: {event_title}\n\nArticolo:\n\n{article}"),
 ])
 
 structured_temporal = structured_llm(extraction_llm, TemporalExtractionResult)
@@ -46,7 +46,11 @@ def event_temporal_extractor(state: NewsArticleState):
     enriched_events = []
 
     for ev in events:
-        messages = full_prompt.format_messages(article=state["article"])
+        event_title = ev.get("title", "") if isinstance(ev, dict) else ""
+        messages = full_prompt.format_messages(
+            article=state["article"],
+            event_title=event_title,
+        )
         response = structured_temporal.invoke(messages)
         spans = list(response.spans or [])
         enriched_events.append(

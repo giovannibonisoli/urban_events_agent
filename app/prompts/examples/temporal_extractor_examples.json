@@ -1,5 +1,6 @@
 [
   {
+    "event": "Fiera di San Giuseppe",
     "article": "La Fiera di San Giuseppe si terrà sabato 16 pomeriggio e domenica 17 marzo, dalle 15 alle 23. L'edizione 2024 sarà inaugurata venerdì 15 marzo alle ore 18.",
     "spans": [
       "sabato 16 pomeriggio",
@@ -7,17 +8,36 @@
       "dalle 15 alle 23",
       "2024",
       "venerdì 15 marzo",
-      "alle ore 18"
+      "ore 18"
     ]
   },
   {
+    "event": "Furto in abitazione",
     "article": "I carabinieri hanno fermato tre persone a San Lazzaro di Savena dopo un furto in abitazione. I militari hanno recuperato gioielli e orologi.",
     "spans": []
   },
   {
+    "event": "Concerto in piazza Martiri",
     "article": "Il concerto si terrà il 6 luglio alle 21:00 in piazza Martiri. In caso di pioggia, l'evento sarà rinviato alla settimana successiva.",
     "spans": [
       "il 6 luglio",
+      "alle 21:00",
+      "alla settimana successiva"
+    ]
+  },
+  {
+    "event": "Dj Set di Dj Carletto",
+    "article": "La quarta edizione della Tade Week entra nel vivo. Venerdì 4 luglio alle 19:15 il Dj Set di Dj Carletto aprirà la serata in piazza Martiri. Sabato 5 luglio alle 18:00 si terrà il Concerto di Palea, mentre domenica 6 luglio alle 21:00 Francesca Fagnani presenterà il suo libro.",
+    "spans": [
+      "Venerdì 4 luglio",
+      "alle 19:15"
+    ]
+  },
+  {
+    "event": "Francesca Fagnani",
+    "article": "La quarta edizione della Tade Week entra nel vivo. Venerdì 4 luglio alle 19:15 il Dj Set di Dj Carletto aprirà la serata in piazza Martiri. Sabato 5 luglio alle 18:00 si terrà il Concerto di Palea, mentre domenica 6 luglio alle 21:00 Francesca Fagnani presenterà il suo libro.",
+    "spans": [
+      "domenica 6 luglio",
       "alle 21:00"
     ]
   }
