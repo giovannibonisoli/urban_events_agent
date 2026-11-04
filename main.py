@@ -22,6 +22,7 @@ def main():
 
         result = graph.invoke(
             {
+                "url": item["url"],
                 "article": item["news text"],
                 "article_title": item.get("title") or "",
                 "article_subtitle": item.get("subtitle") or "",
@@ -40,6 +41,7 @@ def main():
         with open("data/main_results.json", "w", encoding="utf-8") as f:
             json.dump(
                 {
+                    "url": item["url"],
                     "is_event": result.get("is_event"),
                     "events": result.get("events"),
                     "multi_event": result.get("multi_event"),

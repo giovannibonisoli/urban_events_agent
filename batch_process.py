@@ -31,6 +31,7 @@ def process_articles(input_file: str, output_file: str):
 
         state = graph.invoke(
             {
+                "url": item["url"],
                 "article": item["news text"],
                 "article_title": item.get("title") or "",
                 "article_subtitle": item.get("subtitle") or "",
@@ -47,6 +48,7 @@ def process_articles(input_file: str, output_file: str):
         print(f"  [total_article] {article_duration:.3f}s")
 
         entry = {
+            "url": item["url"],
             "title": item.get("title") or "",
             "subtitle": item.get("subtitle") or "",
             "article": item["news text"],

@@ -3,6 +3,7 @@ from typing_extensions import TypedDict
 
 
 class NewsArticleState(TypedDict):
+    url: str
     article: str
     article_title: Optional[str]
     article_subtitle: Optional[str]
