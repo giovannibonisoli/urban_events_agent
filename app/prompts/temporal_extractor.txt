@@ -26,9 +26,25 @@ Devi estrarre sia:
 Restituisci esclusivamente un oggetto JSON valido, senza blocchi di codice, virgolette di formattazione né testo introduttivo o conclusivo.
 
 Esempi di output:
-{"spans": ["marcoledì", "verso le 21"]}
-{"spans": ["questa mattina"]}
-{"spans": ["2025", "dal 12 al 20 novembre"]}
+{
+    "spans": [
+        "marcoledì", 
+        "verso le 21"
+    ]
+}
+{
+    "spans": [
+        "questa mattina"
+    ]
+}
+{
+    "spans": [
+        "2025", 
+        "dal 12 al 20 novembre"
+    ]
+}
 
 Esempio di output se non sono presenti espressioni temporali:
-{"spans": []}
+{
+    "spans": []
+}

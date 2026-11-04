@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from langchain_core.messages import SystemMessage
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
 
 from app.llm import extraction_llm, structured_llm
@@ -31,7 +32,7 @@ few_shot_prompt = FewShotChatMessagePromptTemplate(
 )
 
 full_prompt = ChatPromptTemplate.from_messages([
-    ("system", SYSTEM_PROMPT),
+    SystemMessage(content=SYSTEM_PROMPT),
     few_shot_prompt,
     ("human", "Evento da analizzare: {event_title}\n\nArticolo:\n\n{article}"),
 ])

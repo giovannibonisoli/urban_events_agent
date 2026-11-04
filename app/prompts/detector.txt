@@ -37,7 +37,12 @@ NON estrarre eventi se il testo si riferisce a:
 Restituisci esclusivamente un oggetto JSON valido, senza blocchi di codice, virgolette di formattazione né testo introduttivo o conclusivo.
 
 Esempio di output con eventi:
-{"events": [{"title": "Inaugurazione della nuova biblioteca", "is_main": true}, {"title": "Chiusura temporanea di via Roma", "is_main": false}]}
+{
+  "events": [
+    {"title": "Inaugurazione della nuova biblioteca", "is_main": true},
+    {"title": "Chiusura temporanea di via Roma", "is_main": false}
+  ]
+}
 
 Esempio di output senza eventi concreti (Non-Evento):
 {"events": []}

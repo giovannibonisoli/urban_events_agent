@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.messages import SystemMessage
 
 from app.llm import extraction_llm, structured_llm
 from app.models.date_extraction import EndDateExtraction, StartDateExtraction
@@ -39,9 +40,12 @@ VARIANTS = (
 )
 
 
-def _prompt(system_prompt: str) -> ChatPromptTemplate:
+def _prompt(sys_txt: str) -> ChatPromptTemplate:
+    # System text is a finished message so braces inside the prompt stay literal.
+    # The article is passed as one already-built string: publication date, optional
+    # event title, optional start date, and the article body.
     return ChatPromptTemplate.from_messages([
-        ("system", system_prompt),
+        SystemMessage(content=sys_txt),
         ("human", "{user_input}"),
     ])
 

@@ -8,12 +8,7 @@ Riceverai in input:
 
 Il tuo compito è calcolare la data di inizio (start_date) e la data di fine (end_date) dell'evento specificato.
 
-1. STRUTTURA DELLE DATE
-
-Le date devono essere rappresentate con i seguenti campi:
-{"day": GG|null, "month": MM|null, "year": YYYY|null}
-
-2. REGOLE PER LA DATA DI INIZIO (start_date)
+1. REGOLE PER LA DATA DI INIZIO (start_date)
 
 - Espressioni Esplicite Complete: Estrai giorno, mese e anno (es. "19 luglio 2026" -> {"day": 19, "month": 7, "year": 2026}).
 - Espressioni Esplicite Incomplete:
@@ -25,14 +20,14 @@ Le date devono essere rappresentate con i seguenti campi:
 - Eventi Scatenanti Passati: Se l'articolo descrive un evento principale corrente (es. un presidio di protesta o un decesso) avvenuto a distanza da un evento scatenante passato (es. un incendio o un incidente avvenuto settimane prima), estrai la data dell'EVENTO PRINCIPALE CORRENTE, non dell'evento scatenante passato.
 - Espressioni Vaghe o Indeterminate: Se si cita solo un periodo impreciso (es. "qualche settimana fa", "a metà del mese scorso"), imposta a null i campi non determinabili con certezza.
 
-3. REGOLE PER LA DATA DI FINE (end_date)
+2. REGOLE PER LA DATA DI FINE (end_date)
 
 - Eventi a Giorno Singolo: Se l'evento si svolge in un solo giorno, la data di fine deve avere tutti i campi a null: {"day": null, "month": null, "year": null}.
 - Eventi Multi-giorno Espliciti: Se il testo indica un intervallo (es. "dal 12 al 20 novembre 2026"), estrai l'ultimo giorno dell'evento per end_date.
 - Durata Calcolata: Se è indicata la durata (es. "inizia il 3 aprile per tre giorni"), calcola l'ultimo giorno effettivo dell'intervallo (end_date: 5 aprile 2026).
 - Fine Indeterminata: Se l'evento continua "fino a data da destinarsi" o la fine non è determinabile, imposta i campi di end_date a null.
 
-4. FORMATO DI OUTPUT
+3. FORMATO DI OUTPUT
 
 Restituisci esclusivamente un oggetto JSON valido, senza blocchi di codice, virgolette di formattazione né testo introduttivo o conclusivo.
 

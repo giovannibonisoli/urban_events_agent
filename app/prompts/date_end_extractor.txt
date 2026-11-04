@@ -8,12 +8,7 @@ Riceverai in input:
 
 Il tuo compito è calcolare esclusivamente la data di fine (end_date) dell'evento specificato.
 
-1. STRUTTURA DELLA DATA
-
-La data di fine deve essere rappresentata con i seguenti campi:
-{"end_date": {"day": GG|null, "month": MM|null, "year": YYYY|null}}
-
-2. REGOLE PER LA DATA DI FINE (end_date)
+1. REGOLE PER LA DATA DI FINE (end_date)
 
 - Eventi a Giorno Singolo: Se l'evento si svolge in un solo giorno o non ci sono indicazioni di estensione su più giorni, imposta tutti i campi a null: {"day": null, "month": null, "year": null}.
 - Espressioni Esplicite Complete / Incomplete:
@@ -27,7 +22,7 @@ La data di fine deve essere rappresentata con i seguenti campi:
   * Se l'evento dura più giorni ma la data di fine è vaga o imprecisa (es. "per qualche giorno", "fino a data da destinarsi", condanne a mesi/anni), la data di fine deve essere impostata con tutti i campi a null.
 - Assenza di data di fine: Imposta sempre day, month e year a null. Non restituire mai null al posto dell'oggetto data.
 
-3. FORMATO DI OUTPUT
+2. FORMATO DI OUTPUT
 
 Restituisci esclusivamente un oggetto JSON valido, senza blocchi di codice, virgolette di formattazione né testo introduttivo o conclusivo.
 

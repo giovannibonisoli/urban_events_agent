@@ -8,12 +8,7 @@ Riceverai in input:
 
 Il tuo compito è calcolare esclusivamente la data di inizio (start_date) dell'evento specificato.
 
-1. STRUTTURA DELLA DATA
-
-La data di inizio deve essere rappresentata con i seguenti campi:
-{"start_date": {"day": GG|null, "month": MM|null, "year": YYYY|null}}
-
-2. REGOLE PER LA DATA DI INIZIO (start_date)
+1. REGOLE PER LA DATA DI INIZIO (start_date)
 
 - Espressioni Esplicite Complete: Estrai giorno, mese e anno (es. "19 luglio 2026" -> {"day": 19, "month": 7, "year": 2026}).
 - Espressioni Esplicite Incomplete:
@@ -27,7 +22,7 @@ La data di inizio deve essere rappresentata con i seguenti campi:
 - Espressioni Vaghe o Indeterminate: Se si cita solo un periodo impreciso (es. "qualche settimana fa", "a metà del mese scorso"), imposta a null i campi non determinabili con certezza.
 - Assenza di data: Se non è possibile determinare la data di inizio, imposta day, month e year tutti a null. Non restituire mai null al posto dell'oggetto data.
 
-3. FORMATO DI OUTPUT
+2. FORMATO DI OUTPUT
 
 Restituisci esclusivamente un oggetto JSON valido, senza blocchi di codice, virgolette di formattazione né testo introduttivo o conclusivo.
 

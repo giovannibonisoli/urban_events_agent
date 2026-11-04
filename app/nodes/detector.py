@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 from langchain_core.prompts import FewShotChatMessagePromptTemplate, ChatPromptTemplate
+from langchain_core.messages import SystemMessage
 
 from app.llm import detection_llm, structured_llm
 from app.models.detection import DetectionResult
@@ -42,11 +43,13 @@ few_shot_prompt = FewShotChatMessagePromptTemplate(
     examples=[_format_example(ex) for ex in raw_examples],
 )
 
-full_prompt = ChatPromptTemplate.from_messages([
-    ("system", SYSTEM_PROMPT),
-    few_shot_prompt,
-    ("human", "Articolo:\n\n{article}"),
-])
+full_prompt = ChatPromptTemplate.from_messages(
+    [
+        SystemMessage(content=SYSTEM_PROMPT),
+        few_shot_prompt,
+        ("human", "Articolo:\n\n{article}"),
+    ]
+)
 
 structured_detector = structured_llm(detection_llm, DetectionResult)
 
