@@ -16,7 +16,7 @@ with open("app/prompts/examples/temporal_extractor_examples.json", encoding="utf
 
 
 def _format_example(ex):
-    input_text = f"Evento da analizzare: {ex['event']}\n\nArticolo:\n\n{ex['article']}"
+    input_text = f"Evento da analizzare: {ex['event_title']}\n\nArticolo:\n\n{ex['article']}"
     output_text = json.dumps({"spans": ex.get("spans", [])}, ensure_ascii=False)
     return {"input": input_text, "output": output_text}
 

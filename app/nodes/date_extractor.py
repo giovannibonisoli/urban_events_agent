@@ -1,21 +1,29 @@
 import json
 from pathlib import Path
 
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    FewShotChatMessagePromptTemplate,
+)
 
 from app.llm import extraction_llm, structured_llm
 from app.models.date_extraction import EndDateExtraction, StartDateExtraction
 from app.models.event import _DateExtraction, EventDate
 from app.state import NewsArticleState
 
-
+# Caricamento dei file di prompt
 BOTH_PROMPT = Path("app/prompts/date_extractor.txt").read_text(encoding="utf-8")
 START_PROMPT = Path("app/prompts/date_start_extractor.txt").read_text(encoding="utf-8")
 END_PROMPT = Path("app/prompts/date_end_extractor.txt").read_text(encoding="utf-8")
 
-# Input layouts compared by the date test. Title and subtitle are prepended to
-# the article text; the event title is an extra field when requested.
+# Caricamento degli esempi Few-Shot
+try:
+    with open("app/prompts/examples/date_extractor_examples.json", encoding="utf-8") as f:
+        raw_examples = json.load(f)
+except FileNotFoundError:
+    raw_examples = []
+
 VARIANTS = (
     {
         "id": "article_publication",
@@ -40,19 +48,94 @@ VARIANTS = (
 )
 
 
-def _prompt(sys_txt: str) -> ChatPromptTemplate:
-    # System text is a finished message so braces inside the prompt stay literal.
-    # The article is passed as one already-built string: publication date, optional
-    # event title, optional start date, and the article body.
+def _article_text(article: str, title: str, subtitle: str, include_header: bool) -> str:
+    if not include_header:
+        return article
+    return f"Titolo: {title}\nSottotitolo: {subtitle}\n\n{article}"
+
+
+def _user_input(*, publication_date: str, article: str, event_title: str | None, start_date: dict | None) -> str:
+    parts = [f"Data di pubblicazione: {publication_date}"]
+    if start_date is not None:
+        parts.append("Data di inizio (start_date): " + json.dumps(start_date, ensure_ascii=False))
+    if event_title is not None:
+        parts.append(f"Evento da analizzare: {event_title}")
+    parts.append(f"Articolo:\n\n{article}")
+    return "\n\n".join(parts)
+
+
+# --- FORMATTATORI FEW-SHOT PER OGNI CASISTICA ---
+def _format_both_example(ex):
+    input_text = _user_input(
+        publication_date=ex["publication_date"],
+        article=_article_text(
+            ex["article"],
+            ex.get("title", ""),
+            ex.get("subtitle", ""),
+            include_header=True,
+        ),
+        event_title=ex.get("event_title"),
+        start_date=None,
+    )
+    output_text = json.dumps(
+        {"start_date": ex["start_date"], "end_date": ex["end_date"]},
+        ensure_ascii=False,
+    )
+    return {"user_input": input_text, "output": output_text}
+
+
+def _format_start_example(ex):
+    input_text = _user_input(
+        publication_date=ex["publication_date"],
+        article=_article_text(
+            ex["article"],
+            ex.get("title", ""),
+            ex.get("subtitle", ""),
+            include_header=True,
+        ),
+        event_title=ex.get("event_title"),
+        start_date=None,
+    )
+    output_text = json.dumps({"start_date": ex["start_date"]}, ensure_ascii=False)
+    return {"user_input": input_text, "output": output_text}
+
+
+def _format_end_example(ex):
+    input_text = _user_input(
+        publication_date=ex["publication_date"],
+        article=_article_text(
+            ex["article"],
+            ex.get("title", ""),
+            ex.get("subtitle", ""),
+            include_header=True,
+        ),
+        event_title=ex.get("event_title"),
+        start_date=ex["start_date"],
+    )
+    output_text = json.dumps({"end_date": ex["end_date"]}, ensure_ascii=False)
+    return {"user_input": input_text, "output": output_text}
+
+
+# Costruttore sicuro di ChatPromptTemplate che evita il parsing delle graffe JSON
+def _build_prompt(sys_txt: str, format_fn) -> ChatPromptTemplate:
+    example_prompt = ChatPromptTemplate.from_messages([
+        ("human", "{user_input}"),
+        ("ai", "{output}"),
+    ])
+    few_shot_prompt = FewShotChatMessagePromptTemplate(
+        example_prompt=example_prompt,
+        examples=[format_fn(ex) for ex in raw_examples],
+    )
     return ChatPromptTemplate.from_messages([
         SystemMessage(content=sys_txt),
+        few_shot_prompt,
         ("human", "{user_input}"),
     ])
 
 
-both_prompt = _prompt(BOTH_PROMPT)
-start_prompt = _prompt(START_PROMPT)
-end_prompt = _prompt(END_PROMPT)
+both_prompt = _build_prompt(BOTH_PROMPT, _format_both_example)
+start_prompt = _build_prompt(START_PROMPT, _format_start_example)
+end_prompt = _build_prompt(END_PROMPT, _format_end_example)
 
 structured_both = structured_llm(extraction_llm, _DateExtraction)
 structured_start = structured_llm(extraction_llm, StartDateExtraction)
@@ -100,31 +183,6 @@ def _empty_pair(error: str | None = None) -> dict:
     return pair
 
 
-def _article_text(article: str, title: str, subtitle: str, include_header: bool) -> str:
-    if not include_header:
-        return article
-    return f"Titolo: {title}\nSottotitolo: {subtitle}\n\n{article}"
-
-
-def _user_input(
-    *,
-    publication_date: str,
-    article: str,
-    event_title: str | None,
-    start_date: dict | None,
-) -> str:
-    parts = [f"Data di pubblicazione: {publication_date}"]
-    if start_date is not None:
-        parts.append(
-            "Data di inizio (start_date): "
-            + json.dumps(start_date, ensure_ascii=False)
-        )
-    if event_title is not None:
-        parts.append(f"Evento da analizzare: {event_title}")
-    parts.append(f"Articolo:\n\n{article}")
-    return "\n\n".join(parts)
-
-
 def _invoke(chain, prompt: ChatPromptTemplate, user_input: str, label: str):
     try:
         return chain.invoke(prompt.format_messages(user_input=user_input)), None
@@ -145,13 +203,7 @@ def _single_request(user_input: str, label: str) -> dict:
     }
 
 
-def _separate_requests(
-    *,
-    publication_date: str,
-    article: str,
-    event_title: str | None,
-    label: str,
-) -> dict:
+def _separate_requests(*, publication_date: str, article: str, event_title: str | None, label: str) -> dict:
     start_input = _user_input(
         publication_date=publication_date,
         article=article,
@@ -167,7 +219,9 @@ def _separate_requests(
     if start_raw is None:
         start_date = _date_to_dict(None)
     else:
-        start_date = _date_to_dict(_validate_date(start_raw.start_date, "start_date"))
+        start_date = _date_to_dict(
+            _validate_date(start_raw.start_date, "start_date")
+        )
 
     end_input = _user_input(
         publication_date=publication_date,
@@ -195,13 +249,7 @@ def _separate_requests(
     return pair
 
 
-def _run_variant(
-    *,
-    publication_date: str,
-    article: str,
-    event_title: str | None,
-    variant_id: str,
-) -> dict:
+def _run_variant(*, publication_date: str, article: str, event_title: str | None, variant_id: str) -> dict:
     user_input = _user_input(
         publication_date=publication_date,
         article=article,
@@ -237,8 +285,6 @@ def date_extractor(state: NewsArticleState) -> dict:
 
     events = state.get("events") or []
     enriched_events = []
-    # Configurations that do not use the event title are identical for every
-    # event in the article, so each of those calls is made once.
     cache: dict[tuple, dict] = {}
 
     for ev in events:

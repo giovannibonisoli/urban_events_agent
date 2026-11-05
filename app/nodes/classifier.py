@@ -16,7 +16,7 @@ with open("app/prompts/examples/classifier_examples.json", encoding="utf-8") as 
 
 
 def _format_example(ex):
-    input_text = f"Articolo:\n\n{ex['article']}"
+    input_text = f"Articolo:\n\n{ex['article']}\n\nEvento da classificare:{ex['event_title']}\n\n"
     output_text = json.dumps({"event_category": ex["event_category"]}, ensure_ascii=False)
     return {"input": input_text, "output": output_text}
 
@@ -41,7 +41,7 @@ few_shot_prompt = FewShotChatMessagePromptTemplate(
 full_prompt = ChatPromptTemplate.from_messages([
     SystemMessage(content=SYSTEM_PROMPT),
     few_shot_prompt,
-    ("human", "Articolo:\n\n{article}\n\nEvento da classificare: {event_title}"),
+    ("human", "Articolo:\n\n{article}\nEvento da classificare:\n\n{event_title}"),
 ])
 
 structured_classifier = structured_llm(detection_llm, ClassificationResult)
@@ -54,7 +54,7 @@ def event_classifier(state: NewsArticleState):
 
     event_categories: list[str] = []
     for ev in events:
-        event_title = ev.get("title", "") if isinstance(ev, dict) else ""
+        event_title = ev.get("event_title", "") if isinstance(ev, dict) else ""
         messages = full_prompt.format_messages(article=state["article"], event_title=event_title)
         response = structured_classifier.invoke(messages)
         event_categories.append(response.event_category)
