@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import (
     ChatPromptTemplate,
@@ -13,21 +12,16 @@ from app.state import NewsArticleState
 
 SYSTEM_PROMPT = Path("app/prompts/geo_span_extractor.txt").read_text(encoding="utf-8")
 
-# Caricamento opzionale dei pochi-shot
 try:
-  with open("app/prompts/examples/geo_span_examples.json", encoding="utf-8") as f:
-    raw_examples = json.load(f)
-except FileNotFoundError:
-  raw_examples = []
-
+    with open("app/prompts/examples/geo_span_examples.json", encoding="utf-8") as f:
+        raw_examples = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError):
+    raw_examples = []
 
 def _format_example(ex):
-  input_text = (
-      f"Articolo:\n\n{ex['article']}\n\nEvento da analizzare: {ex['event']}"
-  )
-  output_text = json.dumps({"all_loc_span": ex["all_loc_span"]}, ensure_ascii=False)
-  return {"input": input_text, "output": output_text}
-
+    input_text = f"Articolo:\n\n{ex['article']}\n\nEvento da analizzare: {ex['event']}"
+    output_text = json.dumps({"all_loc_span": ex["all_loc_span"]}, ensure_ascii=False)
+    return {"input": input_text, "output": output_text}
 
 example_prompt = ChatPromptTemplate.from_messages([
     ("human", "{input}"),
@@ -47,31 +41,26 @@ full_prompt = ChatPromptTemplate.from_messages([
 
 structured_geo_span = structured_llm(extraction_llm, GeoSpanExtractionResult)
 
-
 def geo_span_extractor(state: NewsArticleState) -> dict:
-  print("\n========== GEO SPAN EXTRACTOR ==========")
+    print("\n========== GEO SPAN EXTRACTOR ==========")
 
-  events = state.get("events") or []
-  if not state.get("is_event") or not events:
-    print("No events found. Skipping geo span extraction.")
-    return {"events": events}
+    events = state.get("events") or []
+    if not state.get("is_event") or not events:
+        return {"events": events}
 
-  enriched_events = []
-  for ev in events:
-    if not isinstance(ev, dict):
-      enriched_events.append(ev)
-      continue
+    enriched_events = []
+    for ev in events:
+        if not isinstance(ev, dict):
+            enriched_events.append(ev)
+            continue
 
-    event_title = ev.get("title", "")
-    messages = full_prompt.format_messages(
-        article=state["article"], event_title=event_title
-    )
+        event_title = ev.get("title", "")
+        messages = full_prompt.format_messages(
+            article=state["article"], event_title=event_title
+        )
 
-    response: GeoSpanExtractionResult = structured_geo_span.invoke(messages)
-    print(f"Extracted spans for '{event_title}': {response.all_loc_span}")
+        response: GeoSpanExtractionResult = structured_geo_span.invoke(messages)
+        ev_updated = {**ev, "all_loc_span": response.all_loc_span}
+        enriched_events.append(ev_updated)
 
-    # Salva all_loc_span nell'oggetto evento
-    ev_updated = {**ev, "all_loc_span": response.all_loc_span}
-    enriched_events.append(ev_updated)
-
-  return {"events": enriched_events}
+    return {"events": enriched_events}

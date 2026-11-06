@@ -8,18 +8,6 @@ class EventDate(BaseModel):
     year: Optional[int] = None
 
 
-class _GeoExtraction(BaseModel):
-    place: str = Field(default="", description="Nome del centro abitato esplicitamente citato come luogo dell'evento (comune, città, paese, frazione, località). Usare '' solo se non citato.")
-    county: Optional[str] = Field(default=None, description="Provincia esplicitamente menzionata nell'articolo. None se non presente.")
-    street: Optional[str] = Field(default=None, description="Nome della via, piazza, strada, corso, viale, statale. None se non presente.")
-    loc_description: Optional[str] = Field(default=None, description="Descrizione del luogo specifico (nome del luogo, edificio, negozio, stadio, punto di riferimento, ecc.) esplicitamente citato. None se non presente.")
-
-
-class _DateExtraction(BaseModel):
-    start_date: EventDate = Field(default_factory=EventDate)
-    end_date: Optional[EventDate] = None
-
-
 class Event(BaseModel):
     category: str
     place: str

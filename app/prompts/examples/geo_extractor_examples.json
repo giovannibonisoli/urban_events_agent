@@ -1,23 +1,93 @@
 [
   {
-    "article": "Il pavimento che trema, dall'inizio alla fine. Oltre due ore di concerto ininterrotte con un parterre di ospiti eccezionale, un San Siro gremito fino all'orlo e una scenografia iconica. Dopo il successo della prima serata di $€LEBRATION, il decennale della carriera di Boschetti, anche il secondo appuntamento del 9 luglio a San Siro si è trasformato in un trionfo per Sfera Ebbasta. Lo stadio, completamente sold out, ha accolto decine di migliaia di fan per uno show che ha unito musica, spettacolo e un forte legame con Milano, città che ha fatto da sfondo a una produzione imponente e ricca di dettagli simbolici.\n\nMilano e la sua iconografia al centro della scena\n\nFin dall'inizio, è stata la scenografia a catturare l'attenzione del pubblico. Sul palco dominava una gigantesca riproduzione del Duomo di Milano alta 20 metri, con l'iconica Madonnina a svettare sopra la struttura, alta quattro metri. Un elemento che non è rimasto confinato al palco, ma è diventato un vero e proprio filo conduttore della serata: la Madonnina era infatti riprodotta anche sul microfono utilizzato da Sfera Ebbasta e, durante uno dei cambi d'abito, è riapparsa sotto forma di una maxi collana, trasformandosi in un simbolo ricorrente dell'intero concerto. Intorno all'architettura ha preso vita un racconto in costante evoluzione: sullo schermo da 600 metri sono apparse raffigurazioni distopiche di diverse zone di Milano, dai grattacieli iconici in fiamme, alle luci delle finestre dei palazzi popolari, fino alle immagini di Cinisello Balsamo sotto le note di 'Ciny'.\n\nGli ospiti per i 10 anni di carriera\n\nA rendere ancora più speciale la serata è stata la lunga parata di ospiti, che ha ripercorso alcune delle collaborazioni più importanti della carriera dell'artista. Sul palco si sono alternati Tedua, Pyrex, DrefGold, Feid, Elodie, Geolier, Lazza e Shiva. Il concerto ha attraversato le varie fasi del percorso artistico di Sfera Ebbasta, alternando i brani che hanno segnato la ...",
-    "place": "Milano",
-    "county": null,
-    "street": null,
-    "loc_description": "San Siro"
+    "event": "Concerto dei Quintettoni a Ponte a Elsa",
+    "article": "EMPOLI — La grande musica esce dai chiostri cittadini e si sposta nelle frazioni. Prende il via martedì 2 giugno a Ponte a Elsa, frazione del comune di Empoli, la rassegna itinerante \"Musica nelle Frazioni\", che fino al 28 luglio porterà nove appuntamenti gratuiti ogni martedì sera alle 21.15 in diversi angoli del territorio empolese.\n\nAd aprire il cartellone, nella suggestiva cornice della Chiesa di Santo Stefano, sarà il concerto \"Made in Italy\" del gruppo Quintettoni. L'evento inaugurale è pensato come un omaggio musicale per celebrare gli ottant'anni della Repubblica Italiana.\n\nL'iniziativa, promossa dall'associazione culturale Il Contrappunto con il patrocinio del Comune di Empoli, il sostegno del Ministero della Cultura e il supporto della Fondazione Il Cuore si scioglie, punta a trasformare piazze, giardini e spazi pubblici delle frazioni in luoghi di incontro e cultura diffusa.L'iniziativa, promossa dall'associazione culturale Il Contrappunto con il patrocinio del Comune di Empoli, il sostegno del Ministero della Cultura e il supporto della Fondazione Il Cuore si scioglie, punta a trasformare piazze, giardini e spazi pubblici delle frazioni in luoghi di incontro e cultura diffusa.\n\nIl programma della rassegna proseguirà per tutta l'estate toccando anche altre frazioni del comune: Marcignana, Serravalle, Villanuova, Brusciana, Corniola e Fontanella. Tra gli appuntamenti più significativi segnalati dagli organizzatori, anche la tappa del 21 luglio nel giardino della REMS del Pozzale, un concerto fortemente voluto per portare la musica e l'inclusione sociale anche fuori dai contesti tradizionali.",
+    "all_loc_span": [
+      "Ponte a Elsa",
+      "comune di Empoli",
+      "Chiesa di Santo Stefano"
+    ],
+    "output": {
+      "place_type": "single",
+      "places": [
+        {
+          "city": "Empoli",
+          "hamlet": "Ponte a Elsa",
+          "specific_name_place": "Chiesa di Santo Stefano"
+        }
+      ]
+    }
   },
   {
-    "article": "Un furto in abitazione è stato sventato nella collina di via Montebello, a San Lazzaro di Savena, dove tre giovani albanesi e residenti in provincia di Bologna sono stati fermati dai carabinieri mentre cercavano di allontanarsi a bordo di un'auto con gioielli e orologi di lusso appena sottratti da una villetta. L'intervento è scattato dopo una segnalazione al 112 relativa a movimenti sospetti nei pressi dell'abitazione. Sul posto sono arrivati i militari che hanno intercettato l'auto con a bordo un 33enne alla guida e due passeggeri di 22 e 23 anni.\n\nBloccata la fuga, i militari hanno proceduto alla perquisizione dell'auto, rinvenendo diversi oggetti preziosi, tra cui orologi e gioielli di valore stimato in decine di migliaia di euro. Uno degli orologi, un modello Omega, è stato riconosciuto dal proprietario della villetta, un uomo italiano di circa sessant'anni.\n\nDurante i controlli nell'area, è stata inoltre individuata la porta d'ingresso dell'abitazione forzata e, nel giardino, uno strumento da scasso compatibile con l'effrazione.\n\nI tre uomini, di 22, 23 e 33 anni, sono stati arrestati con l'accusa di furto aggravato in abitazione in concorso e accompagnati al Tribunale di Bologna per l'udienza di convalida e il giudizio direttissimo.",
-    "place": "San Lazzaro di Savena",
-    "county": null,
-    "street": "via Montebello",
-    "loc_description": "villetta"
+    "event": "Incidente mortale tra moto e auto all'incrocio tra via Emilia Ovest e via Federico II a Parma",
+    "article": "Tragedia nel pomeriggio a Parma, dove un uomo di 50 anni ha perso la vita in un incidente stradale nel quartiere Crocetta. Lo scontro è avvenuto intorno alle 16.30 all'incrocio tra via Emilia Ovest e via Federico II.\n\nSecondo le prime informazioni, la moto Yamaha condotta dalla vittima si è scontrata con un'auto che procedeva dalla direzione opposta. L'impatto è stato fatale per il motociclista: sul posto sono intervenute un'ambulanza e un'automedica, ma i tentativi di rianimarlo si sono rivelati inutili.\n\nPer consentire i soccorsi e i rilievi, via Emilia Ovest è stata chiusa al traffico nel tratto compreso tra l'intersezione con la tangenziale e via Cremonese. Sul posto è presente la polizia locale per gestire la viabilità e ricostruire la dinamica dell'incidente.\n\nPesanti le ripercussioni sul traffico, con lunghe code lungo il tratto interessato dalla chiusura.",
+    "all_loc_span": [
+      "Parma",
+      "nel quartiere Crocetta",
+      "all'incrocio tra via Emilia Ovest e via Federico II"
+    ],
+    "output": {
+      "place_type": "intersection",
+      "places": [
+        {
+          "city": "Parma",
+          "address": "via Emilia Ovest",
+          "urban_zone": "Crocetta"
+        },
+        {
+          "city": "Parma",
+          "address": "via Federico II",
+          "urban_zone": "Crocetta"
+        }
+      ]
+    }
   },
   {
-    "article": "(ANSA) – CISTERNA DI LATINA, 13 LUG – Incidente mortale sulla strada statale Appia a Cisterna, nella frazione di Le Castella, in provincia di Latina e a due passi dal comune di Velletri. Per cause ancora in fase di accertamento da parte della polizia locale una Mitsubishi Pajero guidata da un uomo di 57 anni, in auto con una donna di 55, è finita fuori strada intorno a mezzogiorno, schiantadosi contro un albero al lato della carreggiata. L'impatto è risultato fatale per entrambi. Inutile, infatti, l'intervento delle ambulanze del 118, accompagnata da un'auto medica, i mezzi dei vigili del fuoco del comando provinciale pontino e, infine, la polizia locale di Cisterna, i cui agenti si stanno occupando di svolgere i rilievi utili a ricostruire la dinamica dell'accaduto. Il tratto di strada interessato dall'incidente, al momento, risulta chiuso al traffico. (ANSA).",
-    "place": "Cisterna",
-    "county": "Latina",
-    "street": "strada statale Appia",
-    "loc_description": "nella frazione di Le Castella"
+    "event": "Ventanovesima edizione della Maratona di Palermo",
+    "article": "In vista dell’edizione del trentennale, attesa per il prossimo anno, la Maratona di Palermo, con il suo percorso tra i monumenti simbolo della città, è stata inserita dalla Regione siciliana, nel “Calendario delle manifestazioni di grande richiamo turistico” strumento fondamentale per la programmazione, pianificazione e destagionalizzazione del turismo nella nostra regione.\n\nIntanto è record di iscritti per l'edizione numero 29 che si terrà domenica 17 novembre: sono poco più di 2.300 gli atleti al via, cinquanta le nazioni rappresentate. Sarà duello tutto in casa Kenia. Ospite d'onore Francesco Ingargiola, 51 anni, originario di Mazara del Vallo, è il siciliano più veloce di sempre in maratona con il tempo di 2h08'48 (Maratona di Roma del 2000). Sfida tricolore con i campionati italiani Master di maratona.\n\nA commentare e a raccontare la cronaca ma anche le mille emozioni dell'evento sportivo, ormai patrimonio della città, ci saranno Michele Marescalchi, Paolo Mutton e Giuseppe Marcellino.\n\nIl percorso\nLo start verrà dato alle ore 8.30 in piazza Ruggero Settimo, dove è previsto anche l’arrivo. Due giri identici, che toccheranno il cuore della città e il parco della Favorita. Gli atleti che correranno la Maratona di Palermo, passeranno accanto al Teatro Massimo, alla Palazzina Cinese, attraverseranno l’atrio di Palazzo dei Normanni, i Quattro Canti, sfioreranno  San Domenico e la Cattedrale, immergendosi in un patrimonio culturale unico al mondo, con il suo itinerario arabo-normanno entrato a far parte nel 2015, del patrimonio dell’Unesco. Dallo scorso anno tra l’altro, la Maratona di Palermo ha ottenuto la certificazione ufficiale internazionale del percorso (che include anche la mezza maratona).\n\nL’evento palermitano, infatti, trova posto nel prestigioso World Athletics Global Calendar, marcando ancora di più il suo rango internazionale. Partenza unica, al via ci saranno anche coloro che hanno scelto di correre la mezza maratona (un giro del percorso) e la staffetta (4x10.5 chilometri). Ventuno i giudici gara a garantire la regolarità dell'evento.\n\nGli iscritti\nOltre 700 gli atleti che correranno la distanza dei 42,195 km. Praticamente sono raddoppiate le presenze nella distanza regina, rispetto all’edizione dello scorso anno. Aumentate, sempre rispetto alla passata edizione, anche le staffette (4x10,50 km) con 112 team al via. Lievitano anche coloro che correranno la mezza maratona saranno 1400.\n\nMa il dato che vale la pena sottolineare è il boom di atleti stranieri, certificato dalla presenza di oltre cinquanta nazioni al via. Da Polonia (103), Francia (93), Gran Bretagna (90), Belgio (43), Germania (37), Spagna (31), Stati Uniti (28), Austria (24), Svezia (23), il contingente più numeroso.\n\nMa a Palermo sono attesi anche podisti che arriveranno da Malesia, Russia, Olanda, Canada, Australia, Norvegia, Messico, Cina, Portogallo e Singapore solo per citare alcune nazioni. Ben un quarto del totale degli atleti iscritti all’evento, arriva da oltre confine.   ",
+    "all_loc_span": [
+      "Palermo",
+      "piazza Ruggero Settimo",
+      "parco della Favorita",
+      "Teatro Massimo",
+      "Palazzina Cinese",
+      "Palazzo dei Normanni",
+      "Quattro Canti",
+      "San Domenico",
+      "Cattedrale"
+    ],
+    "output": {
+      "place_type": "intersection",
+      "places": [
+        {
+          "city": "Palermo",
+          "address": "piazza Ruggero Settimo"
+        },
+        {
+          "city": "Palermo",
+          "specific_name_place": "parco della Favorita"
+        },
+        {
+          "city": "Palermo",
+          "specific_name_place": "Teatro Massimo"
+        },
+        {
+          "city": "Palermo",
+          "specific_name_place": "Palazzina Cinese"
+        },
+        {
+          "city": "Palermo",
+          "specific_name_place": "Palazzo dei Normanni"
+        },
+        {
+          "city": "Palermo",
+          "specific_name_place": "Quattro Canti"
+        },
+        {
+          "city": "Palermo",
+          "specific_name_place": "San Domenico"
+        }
+      ]
+    }
   }
 ]

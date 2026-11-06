@@ -8,8 +8,8 @@ from langchain_core.prompts import (
 )
 
 from app.llm import extraction_llm, structured_llm
-from app.models.date_extraction import EndDateExtraction, StartDateExtraction
-from app.models.event import _DateExtraction, EventDate
+from app.models.date_extraction import EndDateExtraction, StartDateExtraction, _DateExtraction
+from app.models.event import EventDate
 from app.state import NewsArticleState
 
 # Caricamento dei file di prompt

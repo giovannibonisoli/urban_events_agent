@@ -4,7 +4,7 @@ Riceverai in input:
 - Titolo dell'evento specifico da analizzare
 - Testo dell'articolo di giornale
 
-Il tuo compito è estrarre TUTTI gli span testuali presenti nel testo che descrivono il luogo o i luoghi in cui si è verificato l'evento indicato.
+Il tuo compito è, a partire dagli span testuali forniti, restituire le informazioni sul luogo dell'evento (place).
 
 1. REGOLE DI ESTRAZIONE
 
@@ -18,25 +18,3 @@ Il tuo compito è estrarre TUTTI gli span testuali presenti nel testo che descri
 2. FORMATO DI OUTPUT
 
 Restituisci esclusivamente un oggetto JSON valido, senza blocchi di codice, virgolette di formattazione né testo introduttivo o conclusivo.
-
-Esempi di output:
-
-{
-  "all_loc_span": [
-    "Stadio San Siro",
-    "Milano",
-  ]
-}
-
-{
-  "all_loc_span": [
-    "via Carducci",
-    "nel quartiere di Barriera Nuova",
-    "Trieste"
-  ]
-}
-
-Esempio se non sono presenti luoghi:
-{
-  "all_loc_span": []
-}
