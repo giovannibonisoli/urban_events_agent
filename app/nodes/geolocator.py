@@ -3,8 +3,6 @@ from pathlib import Path
 
 from geopy.geocoders import Nominatim
 
-from app.models.event import Event
-
 
 geolocator = Nominatim(user_agent="urban_events_agent")
 

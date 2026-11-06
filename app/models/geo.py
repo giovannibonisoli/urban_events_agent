@@ -7,13 +7,7 @@ class GeoSpanExtractionResult(BaseModel):
   all_loc_span: list[str] = Field(default_factory=list)
 
 
-# 2. Struttura del singolo attributo geografico con Provenance
-class GeoField(BaseModel):
-  value: str
-  provenance: Literal["extracted", "deduced"] = "extracted"
-
-
-# 3. Dettaglio dei campi specifici per un luogo
+# 2. Dettaglio dei campi specifici per un luogo
 class LocationItem(BaseModel):
   city: Optional[str] = None
   hamlet: Optional[str] = None
@@ -23,8 +17,8 @@ class LocationItem(BaseModel):
   specific_name_place: Optional[str] = None
 
 
-# 4. Risultato del secondo agente: GEO STRUCTURER
+# 3. Risultato del secondo agente: GEO STRUCTURER
 class EventGeoExtraction(BaseModel):
-  # Allineato alle linee guida: "single", "intersection", "disjoint" (o "disgiunto" / "intersezione" / "singolo")
-  place_type: Literal["single", "intersection", "disjoint"] = "single"
+  # Allineato alle linee guida: "single", "intersection", "multiple"
+  place_type: Literal["single", "intersection", "multiple"] = "single"
   places: list[LocationItem] = Field(default_factory=list)
