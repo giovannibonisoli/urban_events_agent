@@ -20,7 +20,7 @@ def process_articles(input_file: str, output_file: str):
     with open(input_path, encoding="utf-8") as f:
         items = json.load(f, strict=False)
 
-    items = items[:2]
+    items = items[:2] + [items[3]]
 
     results = []
 

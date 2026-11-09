@@ -45,28 +45,36 @@ full_prompt = ChatPromptTemplate.from_messages([
 
 structured_geo = structured_llm(extraction_llm, EventGeoExtraction)
 
-MUNICIPALITIES_CSV = Path("data/italian_provinces.csv")
+MUNICIPALITIES_CSV = Path("data/italian_municipalities.csv")
+COUNTRIES_CSV = Path("data/italian_provinces.csv")
 REGIONS_CSV = Path("data/italian_regions.csv")
 
 
 def _load_municipalities() -> dict[str, str]:
     municipalities: dict[str, str] = {}
     if MUNICIPALITIES_CSV.exists():
-        with open(MUNICIPALITIES_CSV, encoding="utf-8") as f:
-            for row in csv.DictReader(f):
-                province = (row.get("Province") or "").strip()
-                abbreviation = (row.get("Abbreviation") or "").strip()
-                if province:
-                    municipalities[province.lower()] = province
-                if abbreviation:
-                    municipalities[abbreviation.lower()] = province
+        with open(MUNICIPALITIES_CSV, encoding="latin-1") as f:
+            for row in csv.DictReader(f, delimiter=";"):
+                name = (row.get("Denominazione in italiano") or "").strip()
+                county = ""
+                for key in (
+                    "Denominazione provincia",
+                    "Denominazione Città metropolitana",
+                    "Denominazione regione",
+                ):
+                    candidate = (row.get(key) or "").strip()
+                    if candidate and candidate != "-":
+                        county = candidate
+                        break
+                if name:
+                    municipalities[name.lower()] = county or name
     return municipalities
 
 
 def _load_counties() -> set[str]:
     counties: set[str] = set()
-    if MUNICIPALITIES_CSV.exists():
-        with open(MUNICIPALITIES_CSV, encoding="utf-8") as f:
+    if COUNTRIES_CSV.exists():
+        with open(COUNTRIES_CSV, encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 province = (row.get("Province") or "").strip()
                 region = (row.get("Region") or "").strip()
